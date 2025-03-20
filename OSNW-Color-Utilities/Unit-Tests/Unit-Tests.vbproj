@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <RootNamespace>Unit_Tests</RootNamespace>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net8.0-windows8.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
     <IsTestProject>true</IsTestProject>
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,12 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="OSNW.Graphics.ColorUtilities">
+      <HintPath>..\Utilities\bin\Debug\net8.0-windows8.0\OSNW.Graphics.ColorUtilities.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
