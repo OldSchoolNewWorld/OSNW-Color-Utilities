@@ -3,9 +3,9 @@
   <PropertyGroup>
     <RootNamespace>Utilities</RootNamespace>
     <TargetFramework>net8.0-windows8.0</TargetFramework>
-    <RootNamespace>OSNW.ColorUtils</RootNamespace>
+    <RootNamespace>OSNW.Graphics</RootNamespace>
     <UseWPF>true</UseWPF>
-    <AssemblyName>OSNW.ColorUtils</AssemblyName>
+    <AssemblyName>OSNW.Graphics.ColorUtilities</AssemblyName>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <Title>OSNW Color Utilities</Title>
     <Version>0.1.0</Version>
