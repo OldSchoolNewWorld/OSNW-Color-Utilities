@@ -1,4 +1,9 @@
-﻿Imports OSNW
+﻿Option Explicit On
+Option Strict On
+Option Compare Binary
+Option Infer Off
+
+Imports OSNW
 Imports Xunit
 
 Namespace ColorUtilUnitTests
@@ -210,10 +215,10 @@ Namespace ColorUtilUnitTests
         <InlineData(192, 192, 192, -0.01, 192, 192, 192, 1.0)> ' Too low.
         <InlineData(192, 192, 192, 1.0, 192, 192, 192, -0.01)>
         <InlineData(192, 192, 192, 0.0, 192, 192, 192, 0.0)> ' Both zero.
-        Sub GetBlendColor_BadInput_ForcesResults(color1R As System.Double,
-            color1G As System.Double, color1B As System.Double,
-            color1Proportion As System.Double, color2R As System.Double,
-            color2G As System.Double, color2B As System.Double,
+        Sub GetBlendColor_BadInput_ForcesResults(color1R As System.Byte,
+            color1G As System.Byte, color1B As System.Byte,
+            color1Proportion As System.Double, color2R As System.Byte,
+            color2G As System.Byte, color2B As System.Byte,
             color2Proportion As System.Double)
 
             Dim Color1 As System.Windows.Media.Color =
@@ -242,10 +247,10 @@ Namespace ColorUtilUnitTests
         <InlineData(0, 255, 0, 1.0, 0, 0, 0, 1.0, 0, 128, 0)>
         <InlineData(0, 0, 255, 1.0, 0, 0, 0, 1.0, 0, 0, 128)>
         <InlineData(255, 255, 255, 1.0, 0, 0, 0, 1.0, 128, 128, 128)>
-        Sub GetBlendColor_GoodInput_Succeeds(color1R As System.Double,
-            color1G As System.Double, color1B As System.Double,
-            color1Proportion As System.Double, color2R As System.Double,
-            color2G As System.Double, color2B As System.Double,
+        Sub GetBlendColor_GoodInput_Succeeds(color1R As System.Byte,
+            color1G As System.Byte, color1B As System.Byte,
+            color1Proportion As System.Double, color2R As System.Byte,
+            color2G As System.Byte, color2B As System.Byte,
             color2Proportion As System.Double, expectedR As System.Double,
             expectedG As System.Double, expectedB As System.Double)
 
@@ -328,8 +333,8 @@ Namespace ColorUtilUnitTests
         <InlineData(192, 192, 192, -0.01)>
         <InlineData(192, 192, 192, 1.01)>
         Sub GetShadeColors_BadInput_ForcesResults(
-            ByVal colorInR As System.Double, ByVal colorInG As System.Double,
-            ByVal colorInB As System.Double, ByVal shadeFactor As System.Double)
+            ByVal colorInR As System.Byte, ByVal colorInG As System.Byte,
+            ByVal colorInB As System.Byte, ByVal shadeFactor As System.Double)
 
             Const SMALLDIFF As System.Double = 0.1
             Dim ColorIn As System.Windows.Media.Color =
@@ -357,8 +362,8 @@ Namespace ColorUtilUnitTests
         <InlineData(0.0, 255.0, 0.0, 0.9, 0.0, 25.5, 0.0)>
         <InlineData(0.0, 0.0, 255.0, 0.9, 0.0, 0.0, 25.5)>
         Sub GetShadeColors_GoodInput_Succeeds(
-            ByVal colorInR As System.Double, ByVal colorInG As System.Double,
-            ByVal colorInB As System.Double, ByVal shadeFactor As System.Double,
+            ByVal colorInR As System.Byte, ByVal colorInG As System.Byte,
+            ByVal colorInB As System.Byte, ByVal shadeFactor As System.Double,
             ByRef expectR As System.Double, ByRef expectG As System.Double,
             ByRef expectB As System.Double)
 
@@ -429,8 +434,8 @@ Namespace ColorUtilUnitTests
         <InlineData(192, 192, 192, -0.01)>
         <InlineData(192, 192, 192, 1.01)>
         Sub GetTintColors_BadInput_ForcesResults(
-            ByVal colorInR As System.Double, ByVal colorInG As System.Double,
-            ByVal colorInB As System.Double, ByVal tintFactor As System.Double)
+            ByVal colorInR As System.Byte, ByVal colorInG As System.Byte,
+            ByVal colorInB As System.Byte, ByVal tintFactor As System.Double)
 
             Const SMALLDIFF As System.Double = 0.1
             Dim ColorIn As System.Windows.Media.Color =
@@ -448,18 +453,18 @@ Namespace ColorUtilUnitTests
         End Sub
 
         <Theory>
-        <InlineData(255.0, 0.0, 0.0, 0.1, 255.0, 25.5, 25.5)>
-        <InlineData(0.0, 255.0, 0.0, 0.1, 25.5, 255.0, 25.5)>
-        <InlineData(0.0, 0.0, 255.0, 0.1, 25.5, 25.5, 255.0)>
-        <InlineData(255.0, 0.0, 0.0, 0.5, 255.0, 127.5, 127.5)>
-        <InlineData(0.0, 255.0, 0.0, 0.5, 127.5, 255.0, 127.5)>
-        <InlineData(0.0, 0.0, 255.0, 0.5, 127.5, 127.5, 255.0)>
-        <InlineData(255.0, 0.0, 0.0, 0.9, 255.0, 229.5, 229.5)>
-        <InlineData(0.0, 255.0, 0.0, 0.9, 229.5, 255.0, 229.5)>
-        <InlineData(0.0, 0.0, 255.0, 0.9, 229.5, 229.5, 255.0)>
+        <InlineData(255, 0, 0, 0.1, 255.0, 25.5, 25.5)>
+        <InlineData(0, 255, 0, 0.1, 25.5, 255.0, 25.5)>
+        <InlineData(0, 0, 255, 0.1, 25.5, 25.5, 255.0)>
+        <InlineData(255, 0, 0, 0.5, 255.0, 127.5, 127.5)>
+        <InlineData(0, 255, 0, 0.5, 127.5, 255.0, 127.5)>
+        <InlineData(0, 0, 255, 0.5, 127.5, 127.5, 255.0)>
+        <InlineData(255, 0, 0, 0.9, 255.0, 229.5, 229.5)>
+        <InlineData(0, 255, 0, 0.9, 229.5, 255.0, 229.5)>
+        <InlineData(0, 0, 255, 0.9, 229.5, 229.5, 255.0)>
         Sub GetTintColors_GoodInput_Succeeds(
-            ByVal colorInR As System.Double, ByVal colorInG As System.Double,
-            ByVal colorInB As System.Double, ByVal tintFactor As System.Double,
+            ByVal colorInR As System.Byte, ByVal colorInG As System.Byte,
+            ByVal colorInB As System.Byte, ByVal tintFactor As System.Double,
             ByRef expectR As System.Double, ByRef expectG As System.Double,
             ByRef expectB As System.Double)
 
@@ -535,8 +540,8 @@ Namespace ColorUtilUnitTests
         <InlineData(64, 128, 192, 255.01, 0.5)>
         <InlineData(64, 128, 192, 0.5, 1.01)>
         Sub GetToneColors_BadInput_ForcesResults(
-            ByVal colorInR As System.Double, ByVal colorInG As System.Double,
-            ByVal colorInB As System.Double, ByVal grayLevel As System.Double,
+            ByVal colorInR As System.Byte, ByVal colorInG As System.Byte,
+            ByVal colorInB As System.Byte, ByVal grayLevel As System.Double,
             ByVal toneFactor As System.Double)
 
             Const SMALLDIFF As System.Double = 0.1
@@ -566,8 +571,8 @@ Namespace ColorUtilUnitTests
         <InlineData(0.0, 255.0, 0.0, 229.5, 0.5, 114.75, 242.25, 114.75)>
         <InlineData(0.0, 0.0, 255.0, 229.5, 0.5, 114.75, 114.75, 242.25)>
         Sub GetToneColors_GoodInput_Succeeds(
-            ByVal colorInR As System.Double, ByVal colorInG As System.Double,
-            ByVal colorInB As System.Double, ByVal grayLevel As System.Double,
+            ByVal colorInR As System.Byte, ByVal colorInG As System.Byte,
+            ByVal colorInB As System.Byte, ByVal grayLevel As System.Double,
             ByVal toneFactor As System.Double, ByRef expectR As System.Double,
             ByRef expectG As System.Double, ByRef expectB As System.Double)
 
