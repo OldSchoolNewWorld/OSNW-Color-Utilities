@@ -1,0 +1,3 @@
+﻿Module Easy
+
+End Module
