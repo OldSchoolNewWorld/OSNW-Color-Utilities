@@ -80,6 +80,17 @@ Imports System.Windows
 ''' </remarks>
 Public NotInheritable Class ColorDialog
 
+    ' Initialization constants.
+    Const DEFAULTSHOWCONVERTTAB As System.Boolean = True
+    Const DEFAULTSHOWDEFINEDTAB As System.Boolean = True
+    Const DEFAULTSHOWRGBTTAB As System.Boolean = True
+    Const DEFAULTSHOWHSLTAB As System.Boolean = True
+    Const DEFAULTSHOWHSVTAB As System.Boolean = True
+    Const DEFAULTSHOWSHADETAB As System.Boolean = True
+    Const DEFAULTSHOWTINTTAB As System.Boolean = True
+    Const DEFAULTSHOWTONETAB As System.Boolean = True
+    Const DEFAULTSHOWBLENDTAB As System.Boolean = True
+
 #Region "Properties"
 
     ' DEV: These specific properties are not intended as part of the model. They
@@ -635,6 +646,7 @@ Public NotInheritable Class ColorDialog
         ' Assign initial defaults.
         With Me
 
+            ' Set the initial Window features.
             '            .m_DialogResult = Nothing ' Matches default.
             '            .m_Owner = Nothing ' Matches default.
             .m_ResizeMode = ResizeMode.CanResize ' Matches default for a Window.
@@ -642,6 +654,17 @@ Public NotInheritable Class ColorDialog
             .m_Title = "SET TITLE!"
             '            .m_WindowStartupLocation =
             '                WindowStartupLocation.Manual ' Matches default.
+
+            ' Set the initial tab visibility.
+            .m_ShowConvertTab = DEFAULTSHOWCONVERTTAB
+            .m_ShowDefinedTab = DEFAULTSHOWDEFINEDTAB
+            .m_ShowRgbTab = DEFAULTSHOWRGBTTAB
+            .m_ShowHslTab = DEFAULTSHOWHSLTAB
+            .m_ShowHsvTab = DEFAULTSHOWHSVTAB
+            .m_ShowShadeTab = DEFAULTSHOWSHADETAB
+            .m_ShowTintTab = DEFAULTSHOWTINTTAB
+            .m_ShowToneTab = DEFAULTSHOWTONETAB
+            .m_ShowBlendTab = DEFAULTSHOWBLENDTAB
 
             ' DEV: The HostedDialogWindow is configured with a default icon that
             ' is set in its XAML layout. If m_Icon for the DialogHost is left at
@@ -754,7 +777,7 @@ Public NotInheritable Class ColorDialog
     ''' </exception>
     Public Function ShowDialog() As System.Boolean?
         Dim DlgResult As System.Boolean?
-        Dim HostedWindow As New OSNW.Graphics.ColorDialog
+        Dim HostedWindow As New OSNW.Graphics.ColorDlgWindow
         Try
 
             ' Set the model properties that get sent to the window.
