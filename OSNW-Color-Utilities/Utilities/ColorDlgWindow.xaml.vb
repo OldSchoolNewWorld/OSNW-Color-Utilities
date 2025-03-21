@@ -2,8 +2,10 @@
 Option Strict On
 Option Compare Binary
 Option Infer Off
+
 Imports System.Windows
 Imports System.Windows.Controls
+
 
 ' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
 ' <projectname>.vbproj file.
@@ -148,18 +150,25 @@ Friend Class ColorDlgWindow
 
         ' Initialize the dialog's state.
         With Me
-            .ShowConvertTab = True
-            .ShowDefinedTab = True
-            .ShowRgbTab = True
-            .ShowHslTab = True
-            .ShowHsvTab = True
-            .ShowShadeTab = True
-            .ShowTintTab = True
-            .ShowToneTab = True
-            .ShowBlendTab = True
+            .ConvertTabItem.Visibility =
+                If(.ShowConvertTab, Visibility.Visible, Visibility.Collapsed)
+            .DefinedTabItem.Visibility =
+                If(.ShowDefinedTab, Visibility.Visible, Visibility.Collapsed)
+            .RgbTabItem.Visibility =
+                If(.ShowRgbTab, Visibility.Visible, Visibility.Collapsed)
+            .HslTabItem.Visibility =
+                If(.ShowHslTab, Visibility.Visible, Visibility.Collapsed)
+            .HsvTabItem.Visibility =
+                If(.ShowHsvTab, Visibility.Visible, Visibility.Collapsed)
+            .ShadeTabItem.Visibility =
+                If(.ShowShadeTab, Visibility.Visible, Visibility.Collapsed)
+            .TintTabItem.Visibility =
+                If(.ShowTintTab, Visibility.Visible, Visibility.Collapsed)
+            .ToneTabItem.Visibility =
+                If(.ShowToneTab, Visibility.Visible, Visibility.Collapsed)
+            .BlendTabItem.Visibility =
+                If(.ShowBlendTab, Visibility.Visible, Visibility.Collapsed)
         End With
-
-
 
         '' Update visual items based on the incoming state.
         'With Me

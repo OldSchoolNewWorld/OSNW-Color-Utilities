@@ -5,8 +5,45 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="Develop Visuals" SizeToContent="WidthAndHeight"
+        WindowStartupLocation="CenterScreen">
+    <DockPanel x:Name="MainDockPanel" LastChildFill="True">
 
-    </Grid>
+        <DockPanel x:Name="BottomDockPanel" DockPanel.Dock="Bottom"
+                   LastChildFill="False" Margin="3">
+            <Button x:Name="ExitButton" DockPanel.Dock="Right" Content="E_xit"
+                    Height="25" Margin="0,3,6,3"
+                    ToolTip="Fix LoadToolTips!"/>
+            <Button x:Name="SelectButton" DockPanel.Dock="Right" Content="Select"
+                    Height="25" Margin="0,3,6,3"
+                    ToolTip="Fix LoadToolTips!"/>
+        </DockPanel>
+
+        <DockPanel x:Name="TopDockPanel" DockPanel.Dock="Bottom"
+                   LastChildFill="True">
+            <DockPanel x:Name="ConvertRgbStackPanel">
+                <StackPanel x:Name="RedStackPanel" DockPanel.Dock="Left" Margin="3,3,0,3">
+                    <Label>Red</Label>
+                    <TextBox x:Name="ConvertRgbRedTextBox" Text="RgbRed"
+                         ToolTip= "Fix LoadToolTips!">
+                    </TextBox>
+                </StackPanel>
+                <StackPanel x:Name="GreenStackPanel" DockPanel.Dock="Left" Margin="6,3,0,3">
+                    <Label>Green</Label>
+                    <TextBox x:Name="ConvertRgbGreenTextBox"
+                                     Text="RgbGreen"
+                                     ToolTip= "Fix LoadToolTips!">
+                    </TextBox>
+                </StackPanel>
+                <StackPanel x:Name="BlueStackPanel" DockPanel.Dock="Left" Margin="6,3,3,3">
+                    <Label>Blue</Label>
+                    <TextBox x:Name="ConvertRgbBlueTextBox"
+                                     Text="RgbBlue"
+                                     ToolTip="Fix LoadToolTips!">
+                    </TextBox>
+                </StackPanel>
+            </DockPanel>
+        </DockPanel>
+
+    </DockPanel>
 </Window>

@@ -18,4 +18,10 @@
     <PackageReleaseNotes>This is the initial setup and implementation.</PackageReleaseNotes>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Resource Include="Resources\YttLogo256.bmp">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>

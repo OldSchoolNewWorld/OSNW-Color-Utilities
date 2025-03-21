@@ -257,54 +257,117 @@ Public NotInheritable Class ColorDialog
     ''' Specifies whether to display the Convert tab.
     ''' </summary>
     Public Property ShowConvertTab As System.Boolean
+        Get
+            Return Me.m_ShowConvertTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowConvertTab = value
+        End Set
+    End Property
 
     Private m_ShowDefinedTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the Defined tab.
     ''' </summary>
     Public Property ShowDefinedTab As System.Boolean
+        Get
+            Return Me.m_ShowDefinedTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowDefinedTab = value
+        End Set
+    End Property
 
     Private m_ShowRgbTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the RGB tab.
     ''' </summary>
     Public Property ShowRgbTab As System.Boolean
+        Get
+            Return Me.m_ShowRgbTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowRgbTab = value
+        End Set
+    End Property
 
     Private m_ShowHslTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the HSL tab.
     ''' </summary>
     Public Property ShowHslTab As System.Boolean
+        Get
+            Return Me.m_ShowHslTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowHslTab = value
+        End Set
+    End Property
 
     Private m_ShowHsvTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the HSV tab.
     ''' </summary>
     Public Property ShowHsvTab As System.Boolean
+        Get
+            Return Me.m_ShowHsvTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowHsvTab = value
+        End Set
+    End Property
 
     Private m_ShowShadeTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the Shade tab.
     ''' </summary>
     Public Property ShowShadeTab As System.Boolean
+        Get
+            Return Me.m_ShowShadeTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowShadeTab = value
+        End Set
+    End Property
 
     Private m_ShowTintTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the Tint tab.
     ''' </summary>
     Public Property ShowTintTab As System.Boolean
+        Get
+            Return Me.m_ShowTintTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowTintTab = value
+        End Set
+    End Property
 
     Private m_ShowToneTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the Tone tab.
     ''' </summary>
     Public Property ShowToneTab As System.Boolean
+        Get
+            Return Me.m_ShowToneTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowToneTab = value
+        End Set
+    End Property
 
     Private m_ShowBlendTab As System.Boolean
     ''' <summary>
     ''' Specifies whether to display the Blend tab.
     ''' </summary>
     Public Property ShowBlendTab As System.Boolean
+        Get
+            Return Me.m_ShowBlendTab
+        End Get
+        Set(value As System.Boolean)
+            Me.m_ShowBlendTab = value
+        End Set
+    End Property
 
 #End Region ' "Localized pass-through properties"
 

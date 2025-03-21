@@ -32,26 +32,7 @@ Imports System.Windows.Controls
 '''' </remarks>
 Partial Friend Class ColorDlgWindow
 
-    ' These links are from looking into being able to have the dialog window not
-    ' be accessible outside of the DLL.
-
-    ' REF: How do I mark a control as 'Private' in WPF?
-    ' https://stackoverflow.com/questions/29525968/how-do-i-mark-a-control-as-private-in-wpf
-
-    ' REF: In WPF, how do I make my controls inside a usercontrol private?
-    ' https://www.ansaurus.com/question/300255-in-wpf-how-do-i-make-my-controls-inside-a-usercontrol-private
-
-    ' REF: x:FieldModifier Directive
-    ' https://learn.microsoft.com/en-us/dotnet/desktop/xaml-services/xfieldmodifier-directive
-
-    ' REF: x:ClassModifier Directive
-    ' https://learn.microsoft.com/en-us/dotnet/desktop/xaml-services/xclassmodifier-directive
-    ' For Microsoft Visual Basic .NET, the string to pass to designate TypeAttributes.NotPublic is Friend.
-    ' That is done in HostedDialogWindow.xaml.
-
-#Region "Event utilities"
-    ' These utilities are intended as part of the model, but the implementation
-    ' may vary or they may be omitted in individual cases.
+#Region "Model Event Utilities"
 
     ''' <summary>
     ''' Evaluate whether there is any reason to consider aborting closure via
@@ -112,7 +93,7 @@ Partial Friend Class ColorDlgWindow
 
     End Function ' OkToOk
 
-#End Region ' "Event utilities"
+#End Region ' "Model Event Utilities"
 
 #Region "Model Events"
 
@@ -196,10 +177,8 @@ Partial Friend Class ColorDlgWindow
     'Private Sub Window_Closed(sender As Object, e As EventArgs) _
     '    Handles Me.Closed
 
-    '    '
-    '    'Throw New System.NotImplementedException(
-    '    '    $"Thrown by {System.Reflection.MethodBase.GetCurrentMethod}")
-    '    '
+    '    Throw New System.NotImplementedException(
+    '        $"Thrown by {System.Reflection.MethodBase.GetCurrentMethod}")
     'End Sub ' Window_Closed
 
     '''' <summary>
@@ -213,10 +192,8 @@ Partial Friend Class ColorDlgWindow
     'Private Sub CancelButton_Click(sender As Object, e As RoutedEventArgs) _
     '    Handles CancelButton.Click
 
-    '    '
-    '    'Throw New System.NotImplementedException(
-    '    '    $"Thrown by {System.Reflection.MethodBase.GetCurrentMethod}")
-    '    '
+    '    Throw New System.NotImplementedException(
+    '        $"Thrown by {System.Reflection.MethodBase.GetCurrentMethod}")
     'End Sub ' CancelButton_Click
 
     ''' <summary>
@@ -229,10 +206,9 @@ Partial Friend Class ColorDlgWindow
         ' if the current status is suitable for closure.
         If Me.OkToOk() Then
 
-            ' Set the return values.
-            Me.TheString = Me.StringTextBox.Text
-            Me.TheInteger = Int32.Parse(Me.IntegerTextBox.Text)
+            ' Set any return values.
 
+            ' Get ready to shut down.
             Me.ClosingViaOk = True
             Me.DialogResult = True
 
@@ -248,33 +224,33 @@ Partial Friend Class ColorDlgWindow
     ' DEV: These events are not intended as part of the model. They are included
     ' to support operation of the example.
 
-    Private Sub SliderR_ValueChanged(sender As Object,
-        e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-        Handles SliderR.ValueChanged
+    'Private Sub SliderR_ValueChanged(sender As Object,
+    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
+    '    Handles SliderR.ValueChanged
 
-        If Not Me.SettingSliders Then
-            Me.Red = CType(SliderR.Value, System.Byte)
-            Me.UpdateVisuals()
-        End If
-    End Sub ' SliderR_ValueChanged
+    '    If Not Me.SettingSliders Then
+    '        Me.Red = CType(SliderR.Value, System.Byte)
+    '        Me.UpdateVisuals()
+    '    End If
+    'End Sub ' SliderR_ValueChanged
 
-    Private Sub SliderG_ValueChanged(sender As Object,
-        e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-        Handles SliderG.ValueChanged
-        If Not Me.SettingSliders Then
-            Me.Green = CType(SliderG.Value, System.Byte)
-            Me.UpdateVisuals()
-        End If
-    End Sub ' SliderG_ValueChanged
+    'Private Sub SliderG_ValueChanged(sender As Object,
+    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
+    '    Handles SliderG.ValueChanged
+    '    If Not Me.SettingSliders Then
+    '        Me.Green = CType(SliderG.Value, System.Byte)
+    '        Me.UpdateVisuals()
+    '    End If
+    'End Sub ' SliderG_ValueChanged
 
-    Private Sub SliderB_ValueChanged(sender As Object,
-        e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-        Handles SliderB.ValueChanged
-        If Not Me.SettingSliders Then
-            Me.Blue = CType(SliderB.Value, System.Byte)
-            Me.UpdateVisuals()
-        End If
-    End Sub ' SliderB_ValueChanged
+    'Private Sub SliderB_ValueChanged(sender As Object,
+    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
+    '    Handles SliderB.ValueChanged
+    '    If Not Me.SettingSliders Then
+    '        Me.Blue = CType(SliderB.Value, System.Byte)
+    '        Me.UpdateVisuals()
+    '    End If
+    'End Sub ' SliderB_ValueChanged
 
 #End Region ' "Example Events"
 
