@@ -2,6 +2,7 @@
 Option Strict On
 Option Compare Binary
 Option Infer Off
+
 Imports System.Windows
 Imports System.Windows.Controls
 
@@ -31,7 +32,6 @@ Imports System.Windows.Controls
 '''' </remarks>
 Partial Friend Class ColorDlgWindow
 
-
     ' These links are from looking into being able to have the dialog window not
     ' be accessible outside of the DLL.
 
@@ -49,7 +49,7 @@ Partial Friend Class ColorDlgWindow
     ' For Microsoft Visual Basic .NET, the string to pass to designate TypeAttributes.NotPublic is Friend.
     ' That is done in HostedDialogWindow.xaml.
 
-#Region "Model utilities"
+#Region "Event utilities"
     ' These utilities are intended as part of the model, but the implementation
     ' may vary or they may be omitted in individual cases.
 
@@ -95,18 +95,26 @@ Partial Friend Class ColorDlgWindow
         ' to below. It can also be deleted, or commented out, to avoid a useless
         ' call.
 
-        ' Does IntegerTextBox contain a valid integer string?
-        Dim TestDestination As System.Int32
-        If System.Int32.TryParse(Me.IntegerTextBox.Text,
-                                 TestDestination) Then
-            Return True
-        Else
-            ' Display a message?
-            Return False
-        End If
+        '' Does IntegerTextBox contain a valid integer string?
+        'Dim TestDestination As System.Int32
+        'If System.Int32.TryParse(Me.IntegerTextBox.Text,
+        '                         TestDestination) Then
+        '    Return True
+        'Else
+        '    ' Display a message?
+        '    Return False
+        'End If
+
+
+
+        Return True
+
+
     End Function ' OkToOk
 
-#End Region ' "Model utilities"
+#End Region ' "Event utilities"
+
+#Region "Model Events"
 
     ''' <summary>
     ''' Occurs when this <c>Window</c> is initialized. Backing fields and local

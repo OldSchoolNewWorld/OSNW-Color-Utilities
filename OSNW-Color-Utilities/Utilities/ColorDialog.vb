@@ -3,14 +3,14 @@ Option Strict On
 Option Compare Binary
 Option Infer Off
 
+Imports System.ComponentModel
+Imports System.IO
+Imports System.Windows
+
 'Imports System.ComponentModel
 'Imports System.IO
 'Imports System.Reflection
 'Imports System.Windows
-
-Imports System.ComponentModel
-Imports System.IO
-Imports System.Windows
 
 ' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
 ' <projectname>.vbproj file.
@@ -89,17 +89,15 @@ Public NotInheritable Class ColorDialog
     Public Property Red As System.Byte
     Public Property Green As System.Byte
     Public Property Blue As System.Byte
-    Public Property TheString As System.String
-    Public Property TheInteger As System.Int32
+
 
 
     'xxxxxxxxxxxxxxxx ADD PROPERTIES TO CONTROL WHICH TABS ARE SHOWN.
-    '    'xxxxxxxxxxxxxxxxxxxxxx REMOVE THE ONES ABOVE.
 
 
 #End Region ' "Properties"
 
-#Region "Pass-through properties"
+#Region "Model pass-through properties"
     ' These are properties for a HostedDialogWindow that does not always exist.
     ' They are passed to the Window when it gets created.
 
@@ -153,11 +151,11 @@ Public NotInheritable Class ColorDialog
     ' https://stackoverflow.com/questions/29748703/how-do-i-write-defaultvaluenull-in-vb-net-defaultvaluenothing-does-not
     ''' <summary>
     ''' Gets or sets the <see cref="System.Windows.Window"/> that owns this
-    ''' <see cref="DialogHost"/>.
+    ''' <see cref="ColorDialog"/>.
     ''' </summary>
     ''' <returns>
     ''' A <see cref="System.Windows.Window"/> object that represents the owner
-    ''' of this <see cref="DialogHost"/>.
+    ''' of this <see cref="ColorDialog"/>.
     ''' </returns>
     ''' <exception cref="System.ArgumentException">
     ''' A window tries to own itself -or- Two windows try to own each other.
@@ -176,6 +174,21 @@ Public NotInheritable Class ColorDialog
         End Get
         Set(value As System.Windows.Window)
             Me.m_Owner = value
+        End Set
+    End Property
+
+    Private m_ResizeMode As System.Windows.ResizeMode
+    ''' <summary>
+    ''' Gets or sets a value that indicates how a window is resized.
+    ''' </summary>
+    ''' <returns>A <see cref="System.Windows.ResizeMode"/> value specifying the
+    ''' resize mode.</returns>
+    Public Property ResizeMode As System.Windows.ResizeMode
+        Get
+            Return Me.m_ResizeMode
+        End Get
+        Set(value As System.Windows.ResizeMode)
+            Me.m_ResizeMode = value
         End Set
     End Property
 
@@ -216,7 +229,7 @@ Public NotInheritable Class ColorDialog
 
     Private m_WindowStartupLocation As WindowStartupLocation
     ''' <summary>
-    ''' Gets or sets the position of the <see cref="DialogHost"/>'s window when
+    ''' Gets or sets the position of the <see cref="ColorDialog"/>'s window when
     ''' first shown.
     ''' </summary>
     ''' <returns>
@@ -235,7 +248,65 @@ Public NotInheritable Class ColorDialog
         End Set
     End Property
 
-#End Region ' "Pass-through properties"
+#End Region ' "Model pass-through properties"
+
+#Region "Localized pass-through properties"
+
+    Private m_ShowConvertTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the Convert tab.
+    ''' </summary>
+    Public Property ShowConvertTab As System.Boolean
+
+    Private m_ShowDefinedTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the Defined tab.
+    ''' </summary>
+    Public Property ShowDefinedTab As System.Boolean
+
+    Private m_ShowRgbTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the RGB tab.
+    ''' </summary>
+    Public Property ShowRgbTab As System.Boolean
+
+    Private m_ShowHslTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the HSL tab.
+    ''' </summary>
+    Public Property ShowHslTab As System.Boolean
+
+    Private m_ShowHsvTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the HSV tab.
+    ''' </summary>
+    Public Property ShowHsvTab As System.Boolean
+
+    Private m_ShowShadeTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the Shade tab.
+    ''' </summary>
+    Public Property ShowShadeTab As System.Boolean
+
+    Private m_ShowTintTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the Tint tab.
+    ''' </summary>
+    Public Property ShowTintTab As System.Boolean
+
+    Private m_ShowToneTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the Tone tab.
+    ''' </summary>
+    Public Property ShowToneTab As System.Boolean
+
+    Private m_ShowBlendTab As System.Boolean
+    ''' <summary>
+    ''' Specifies whether to display the Blend tab.
+    ''' </summary>
+    Public Property ShowBlendTab As System.Boolean
+
+#End Region ' "Localized pass-through properties"
 
 #Region "Exception handling"
 
@@ -503,6 +574,7 @@ Public NotInheritable Class ColorDialog
 
             '            .m_DialogResult = Nothing ' Matches default.
             '            .m_Owner = Nothing ' Matches default.
+            .m_ResizeMode = ResizeMode.CanResize ' Matches default for a Window.
             '            .m_ShowInTaskbar = False ' Matches default.
             .m_Title = "SET TITLE!"
             '            .m_WindowStartupLocation =
@@ -622,9 +694,10 @@ Public NotInheritable Class ColorDialog
         Dim HostedWindow As New OSNW.Graphics.ColorDialog
         Try
 
-            ' Set the properties that get sent to the window.
+            ' Set the model properties that get sent to the window.
 
             HostedWindow.Owner = Me.Owner
+            HostedWindow.ResizeMode = Me.ResizeMode
             HostedWindow.ShowInTaskbar = Me.ShowInTaskbar
             HostedWindow.Title = Me.Title
             HostedWindow.WindowStartupLocation = Me.WindowStartupLocation
@@ -634,11 +707,21 @@ Public NotInheritable Class ColorDialog
                 HostedWindow.Icon = Me.Icon
             End If
 
+            ' Set the localized properties that get sent to the window.
+
             HostedWindow.Red = Me.Red
             HostedWindow.Green = Me.Green
             HostedWindow.Blue = Me.Blue
-            HostedWindow.TheString = Me.TheString
-            HostedWindow.TheInteger = Me.TheInteger
+
+            HostedWindow.ShowConvertTab = Me.ShowConvertTab
+            HostedWindow.ShowDefinedTab = Me.ShowDefinedTab
+            HostedWindow.ShowRgbTab = Me.ShowRgbTab
+            HostedWindow.ShowHslTab = Me.ShowHslTab
+            HostedWindow.ShowHsvTab = Me.ShowHsvTab
+            HostedWindow.ShowShadeTab = Me.ShowShadeTab
+            HostedWindow.ShowTintTab = Me.ShowTintTab
+            HostedWindow.ShowToneTab = Me.ShowToneTab
+            HostedWindow.ShowBlendTab = Me.ShowBlendTab
 
             ' Show the dialog window. Process the result.
             DlgResult = HostedWindow.ShowDialog
@@ -647,8 +730,6 @@ Public NotInheritable Class ColorDialog
                 Me.Red = HostedWindow.Red
                 Me.Green = HostedWindow.Green
                 Me.Blue = HostedWindow.Blue
-                Me.TheString = HostedWindow.TheString
-                Me.TheInteger = HostedWindow.TheInteger
                 'Else
                 '' Is anything needed when ShowDialog is false?
             End If

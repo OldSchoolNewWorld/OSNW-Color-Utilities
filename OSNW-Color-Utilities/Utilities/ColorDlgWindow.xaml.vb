@@ -57,15 +57,22 @@ Friend Class ColorDlgWindow
 
 #Region "Properties"
 
-    ' DEV: These specific properties are not intended as part of the model. They
-    ' are included to support operation of the example. In general, properties
-    ' like these should not need examination by the setter; that should normally
-    ' be handled in the associated <see cref="DialogHost"/>.
+    ' In general, properties like these should not need examination by the
+    ' setter; that should normally be handled in the associated
+    ' <see cref="ColorDialog"/>.
+
     Public Property Red As System.Byte
     Public Property Green As System.Byte
     Public Property Blue As System.Byte
-    Public Property TheString As System.String
-    Public Property TheInteger As System.Int32
+    Public Property ShowConvertTab As System.Boolean
+    Public Property ShowDefinedTab As System.Boolean
+    Public Property ShowRgbTab As System.Boolean
+    Public Property ShowHslTab As System.Boolean
+    Public Property ShowHsvTab As System.Boolean
+    Public Property ShowShadeTab As System.Boolean
+    Public Property ShowTintTab As System.Boolean
+    Public Property ShowToneTab As System.Boolean
+    Public Property ShowBlendTab As System.Boolean
 
 #End Region ' "Properties"
 
@@ -74,19 +81,38 @@ Friend Class ColorDlgWindow
     ' need to perform operations unique to itself.
 
     ''' <summary>
-    ''' DEV: Copied from ColorUtils.vb. This is not part of the model. It is a
-    ''' utility for use with the sample dialog window. It returns a foreground
-    ''' color for ColorTextBox that is readable against the background color.
+    ''' Selects either black or white for maximum contrast to, for example, a
+    ''' background color.
     ''' </summary>
+    ''' <param name="r">Specifies the red component of the reference
+    ''' color.</param>
+    ''' <param name="g">Specifies the green component of the reference
+    ''' color.</param>
+    ''' <param name="b">Specifies the blue component of the reference
+    ''' color.</param>
+    ''' <returns>
+    ''' Either black or white as a <c>System.Windows.Media.Color</c>.
+    ''' </returns>
     Private Shared Function ContrastingBW(ByVal r As System.Byte,
         ByVal g As System.Byte, ByVal b As System.Byte) _
         As System.Windows.Media.Color
 
-        Return If(
-            System.Math.Sqrt((255 - r) ^ 2 + (255 - g) ^ 2 + (255 - b) ^ 2) >
-                System.Math.Sqrt(r ^ 2 + g ^ 2 + b ^ 2),
+        ' Ref: 3D Distance Formula
+        ' https://www.cuemath.com/3d-distance-formula/
+
+        ' No argument checking. Accept any valid System.Byte values.
+
+        ' Hypotenuse3 is reproduced here to avoid excess subroutine calls when
+        ' this method is called from a loop.
+        Dim DistFromBlack As System.Double =
+            System.Math.Sqrt(r ^ 2 + g ^ 2 + b ^ 2)
+        Dim DistFromWhite As System.Double =
+            System.Math.Sqrt((255 - r) ^ 2 + (255 - g) ^ 2 + (255 - b) ^ 2)
+
+        Return If(DistFromWhite > DistFromBlack,
             System.Windows.Media.Colors.White,
             System.Windows.Media.Colors.Black)
+
     End Function ' ContrastingBW
 
 #End Region ' "Internal utilities"
@@ -120,28 +146,46 @@ Friend Class ColorDlgWindow
 
     Private Sub DoWindow_Loaded(sender As Object, e As RoutedEventArgs)
 
-        ' Update visual items based on the incoming state.
+        ' Initialize the dialog's state.
         With Me
-
-            ' DEV: The specific code here is unique to the sample dialog. The
-            ' underlying reason for the Sub may be of use in certain cases.
-
-            ' Suppress having Red changed when SliderR moves to match Red.
-            .SettingSliders = True
-            Try
-                .SliderR.Value = .Red
-                .SliderG.Value = .Green
-                .SliderB.Value = .Blue
-            Finally
-                ' Restore normal slider response.
-                .SettingSliders = False
-            End Try
-
-            .UpdateVisuals()
-            .StringTextBox.Text = .TheString
-            .IntegerTextBox.Text = .TheInteger.ToString
-
+            .ShowConvertTab = True
+            .ShowDefinedTab = True
+            .ShowRgbTab = True
+            .ShowHslTab = True
+            .ShowHsvTab = True
+            .ShowShadeTab = True
+            .ShowTintTab = True
+            .ShowToneTab = True
+            .ShowBlendTab = True
         End With
+
+
+
+        '' Update visual items based on the incoming state.
+        'With Me
+
+        '    ' DEV: The specific code here is unique to the sample dialog. The
+        '    ' underlying reason for the Sub may be of use in certain cases.
+
+        '    ' Suppress having Red changed when SliderR moves to match Red.
+        '    .SettingSliders = True
+        '    Try
+        '        .SliderR.Value = .Red
+        '        .SliderG.Value = .Green
+        '        .SliderB.Value = .Blue
+        '    Finally
+        '        ' Restore normal slider response.
+        '        .SettingSliders = False
+        '    End Try
+
+        '    .UpdateVisuals()
+        '    .StringTextBox.Text = .TheString
+        '    .IntegerTextBox.Text = .TheInteger.ToString
+
+        'End With
+
+
+
     End Sub ' DoWindow_Loaded
 
 #End Region ' "Event Implementations"
@@ -150,33 +194,33 @@ Friend Class ColorDlgWindow
     ' DEV: These events are not intended as part of the model. They are included
     ' to support operation of the example.
 
-    Private Sub SliderR_ValueChanged(sender As Object,
-        e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-        Handles SliderR.ValueChanged
+    'Private Sub SliderR_ValueChanged(sender As Object,
+    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
+    '    Handles SliderR.ValueChanged
 
-        If Not Me.SettingSliders Then
-            Me.Red = CType(SliderR.Value, System.Byte)
-            Me.UpdateVisuals()
-        End If
-    End Sub ' SliderR_ValueChanged
+    '    If Not Me.SettingSliders Then
+    '        Me.Red = CType(SliderR.Value, System.Byte)
+    '        Me.UpdateVisuals()
+    '    End If
+    'End Sub ' SliderR_ValueChanged
 
-    Private Sub SliderG_ValueChanged(sender As Object,
-        e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-        Handles SliderG.ValueChanged
-        If Not Me.SettingSliders Then
-            Me.Green = CType(SliderG.Value, System.Byte)
-            Me.UpdateVisuals()
-        End If
-    End Sub ' SliderG_ValueChanged
+    'Private Sub SliderG_ValueChanged(sender As Object,
+    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
+    '    Handles SliderG.ValueChanged
+    '    If Not Me.SettingSliders Then
+    '        Me.Green = CType(SliderG.Value, System.Byte)
+    '        Me.UpdateVisuals()
+    '    End If
+    'End Sub ' SliderG_ValueChanged
 
-    Private Sub SliderB_ValueChanged(sender As Object,
-        e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-        Handles SliderB.ValueChanged
-        If Not Me.SettingSliders Then
-            Me.Blue = CType(SliderB.Value, System.Byte)
-            Me.UpdateVisuals()
-        End If
-    End Sub ' SliderB_ValueChanged
+    'Private Sub SliderB_ValueChanged(sender As Object,
+    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
+    '    Handles SliderB.ValueChanged
+    '    If Not Me.SettingSliders Then
+    '        Me.Blue = CType(SliderB.Value, System.Byte)
+    '        Me.UpdateVisuals()
+    '    End If
+    'End Sub ' SliderB_ValueChanged
 
 #End Region ' "Example Events"
 
