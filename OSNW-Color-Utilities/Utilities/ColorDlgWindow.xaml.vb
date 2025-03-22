@@ -297,57 +297,6 @@ Friend Class ColorDlgWindow
 #Region "Event Implementations"
     ' These routines contain detailed implementations of Event handlers.
 
-    Private Sub DoWindow_Loaded(sender As Object, e As RoutedEventArgs)
-
-        ' Initialize the dialog's state.
-        With Me
-            .ConvertTabItem.Visibility =
-                If(.ShowConvertTab, Visibility.Visible, Visibility.Collapsed)
-            .DefinedTabItem.Visibility =
-                If(.ShowDefinedTab, Visibility.Visible, Visibility.Collapsed)
-            .RgbTabItem.Visibility =
-                If(.ShowRgbTab, Visibility.Visible, Visibility.Collapsed)
-            .HslTabItem.Visibility =
-                If(.ShowHslTab, Visibility.Visible, Visibility.Collapsed)
-            .HsvTabItem.Visibility =
-                If(.ShowHsvTab, Visibility.Visible, Visibility.Collapsed)
-            .ShadeTabItem.Visibility =
-                If(.ShowShadeTab, Visibility.Visible, Visibility.Collapsed)
-            .TintTabItem.Visibility =
-                If(.ShowTintTab, Visibility.Visible, Visibility.Collapsed)
-            .ToneTabItem.Visibility =
-                If(.ShowToneTab, Visibility.Visible, Visibility.Collapsed)
-            .BlendTabItem.Visibility =
-                If(.ShowBlendTab, Visibility.Visible, Visibility.Collapsed)
-        End With
-
-        '' Update visual items based on the incoming state.
-        'With Me
-
-        '    ' DEV: The specific code here is unique to the sample dialog. The
-        '    ' underlying reason for the Sub may be of use in certain cases.
-
-        '    ' Suppress having Red changed when SliderR moves to match Red.
-        '    .SettingSliders = True
-        '    Try
-        '        .SliderR.Value = .Red
-        '        .SliderG.Value = .Green
-        '        .SliderB.Value = .Blue
-        '    Finally
-        '        ' Restore normal slider response.
-        '        .SettingSliders = False
-        '    End Try
-
-        '    .UpdateVisuals()
-        '    .StringTextBox.Text = .TheString
-        '    .IntegerTextBox.Text = .TheInteger.ToString
-
-        'End With
-
-
-
-    End Sub ' DoWindow_Loaded
-
 #End Region ' "Event Implementations"
 
 #Region "Example Events"

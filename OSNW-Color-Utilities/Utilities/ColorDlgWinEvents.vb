@@ -77,20 +77,7 @@ Partial Friend Class ColorDlgWindow
         ' to below. It can also be deleted, or commented out, to avoid a useless
         ' call.
 
-        '' Does IntegerTextBox contain a valid integer string?
-        'Dim TestDestination As System.Int32
-        'If System.Int32.TryParse(Me.IntegerTextBox.Text,
-        '                         TestDestination) Then
-        '    Return True
-        'Else
-        '    ' Display a message?
-        '    Return False
-        'End If
-
-
-
         Return True
-
 
     End Function ' OkToOk
 
@@ -110,8 +97,7 @@ Partial Friend Class ColorDlgWindow
         ' No argument checking.
 
         ''''''''''Try
-        ''''''''''    Me.Do_Window_Initialized(sender, e)
-        Me.DoWindowInitialized()
+        Me.Do_Window_Initialized(sender, e)
         Me.ClosingViaOk = False
         ''''''''''Catch CaughtEx As System.Exception
         ''''''''''    ' Report the unexpected exception.
@@ -134,8 +120,7 @@ Partial Friend Class ColorDlgWindow
         ' No argument checking.
 
         ''''''''''Try
-        ''''''''''    Me.DoWindowLoaded()
-        Me.DoWindow_Loaded(sender, e)
+        Me.Do_Window_Loaded(sender, e)
         ''''''''''Catch CaughtEx As System.Exception
         ''''''''''    ' Report the unexpected exception.
         ''''''''''    Dim CaughtBy As System.Reflection.MethodBase =
@@ -258,6 +243,710 @@ Partial Friend Class ColorDlgWindow
 
 #Region "Localized Events"
 
+
+#Region "Text Box Events"
+
+    Private Sub ConvertRgbRedTextBox_GotFocus(
+        sender As Object, e As RoutedEventArgs) _
+        Handles ConvertRgbRedTextBox.GotFocus, ConvertRgbGreenTextBox.GotFocus,
+        ConvertRgbBlueTextBox.GotFocus, ConvertHslHueTextBox.GotFocus,
+        ConvertHslSaturationTextBox.GotFocus,
+        ConvertHslLuminanceTextBox.GotFocus, ConvertHsvHueTextBox.GotFocus,
+        ConvertHsvSaturationTextBox.GotFocus, ConvertHsvValueTextBox.GotFocus,
+        BlendRgb1RedTextBox.GotFocus, BlendRgb1GreenTextBox.GotFocus,
+        BlendRgb1BlueTextBox.GotFocus, BlendRgb1RatioTextBox.GotFocus,
+        BlendRgb2RedTextBox.GotFocus, BlendRgb2GreenTextBox.GotFocus,
+        BlendRgb2BlueTextBox.GotFocus, BlendRgb2RatioTextBox.GotFocus
+
+        Dim TheTextBox As System.Windows.Controls.TextBox =
+            DirectCast(sender, System.Windows.Controls.TextBox)
+        TheTextBox.SelectAll()
+    End Sub
+
+#End Region ' "Text Box Events"
+
+#Region "Convert Tab Events"
+
+    Private Sub ConvertTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles ConvertTabItem.GotFocus
+
+        ' Only respond on a new arrival here.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        Me.ConvertRgbRedTextBox.Focus()
+        Me.ConvertUpdateVisuals()
+
+    End Sub ' ConvertTabItem_GotFocus
+
+    Private Sub ConvertTextBox_ByteTextChanged(sender As Object,
+                                               e As TextChangedEventArgs) _
+        Handles ConvertRgbRedTextBox.TextChanged,
+          ConvertRgbGreenTextBox.TextChanged,
+          ConvertRgbBlueTextBox.TextChanged
+
+        ' Get the new value.
+        Dim SendingTextBox As System.Windows.Controls.TextBox =
+            CType(sender, System.Windows.Controls.TextBox)
+        Dim ByteVal As System.Byte
+        If Not System.Byte.TryParse(SendingTextBox.Text, ByteVal) Then
+            SendingTextBox.Background = BadBackgroundBrush
+            Exit Sub ' Early exit.
+        End If
+
+        ' Any byte is valid.
+        SendingTextBox.Background = GoodBackgroundBrush
+
+        ' This appears AFTER the range checks so that pushes will still set the
+        ' good/bad color.
+        If Me.ConvertTabPushing Then
+            ' Do not process further.
+            Exit Sub ' Early exit.
+        End If
+
+        ' Process the new value.
+        Me.DoConvertTextBoxByteTextChanged(SendingTextBox, ByteVal)
+
+    End Sub ' ConvertTextBox_ByteTextChanged
+
+    Private Sub ConvertTextBox_DoubleTextChanged(sender As Object,
+                                                 e As TextChangedEventArgs) _
+       Handles ConvertHslHueTextBox.TextChanged,
+           ConvertHslSaturationTextBox.TextChanged,
+           ConvertHslLuminanceTextBox.TextChanged,
+           ConvertHsvHueTextBox.TextChanged,
+           ConvertHsvSaturationTextBox.TextChanged,
+           ConvertHsvValueTextBox.TextChanged
+
+        ' Get the new value.
+        Dim SendingTextBox As System.Windows.Controls.TextBox =
+            CType(sender, System.Windows.Controls.TextBox)
+        Dim DoubleVal As System.Double
+        If Not System.Double.TryParse(SendingTextBox.Text, DoubleVal) Then
+            SendingTextBox.Background = BadBackgroundBrush
+            Exit Sub ' Early exit.
+        End If
+
+        ' Getting this far indicates a good double. Check range.
+        If SendingTextBox.Equals(Me.ConvertHslHueTextBox) OrElse
+                SendingTextBox.Equals(Me.ConvertHsvHueTextBox) Then
+
+            ' Prevent reaching full scale.
+            If DoubleVal < 0.0 OrElse DoubleVal >= 1.0 Then
+                SendingTextBox.Background = BadBackgroundBrush
+                Exit Sub ' Early exit.
+            End If
+        Else
+            ' Allow reaching full scale.
+            If DoubleVal < 0.0 OrElse DoubleVal > 1.0 Then
+                SendingTextBox.Background = BadBackgroundBrush
+                Exit Sub ' Early exit.
+            End If
+        End If
+
+        ' Getting this far indicates in-range. This appears AFTER the range
+        ' checks so that pushes will still set the good/bad color.
+        SendingTextBox.Background = GoodBackgroundBrush
+        If Me.ConvertTabPushing Then
+            ' Do not process further.
+            Exit Sub ' Early exit.
+        End If
+
+        ' Process the new value.
+        Me.DoConvertTextBoxDoubleTextChanged(SendingTextBox, DoubleVal)
+
+    End Sub ' ConvertTextBox_DoubleTextChanged
+
+#End Region ' "Convert Tab Events"
+
+#Region "Defined Tab Events"
+
+    Private Sub DefinedTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles DefinedTabItem.GotFocus
+
+        ' Only respond on a new arrival here.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        Me.DefinedComboBox.SelectedItem = Nothing
+
+    End Sub
+
+    Private Sub DefinedComboBox_SelectionChanged(
+        sender As Object, e As SelectionChangedEventArgs) _
+        Handles DefinedComboBox.SelectionChanged
+
+        If Me.DefinedComboBox.SelectedValue IsNot Nothing Then
+
+            ' Identify the Label with the selected color.
+            Dim SelectedLabel As System.Windows.Controls.Label =
+                CType(Me.DefinedComboBox.SelectedValue,
+                System.Windows.Controls.Label)
+
+            ' Extract and store the selected color, allowing the default
+            ' LastRgbChangeEnum assignment.
+            Dim SelectedBrush As System.Windows.Media.Brush =
+                SelectedLabel.Background
+            Dim SelectedSolidBrush As System.Windows.Media.SolidColorBrush =
+                CType(SelectedLabel.Background,
+                      System.Windows.Media.SolidColorBrush)
+            Dim SelectedColor As System.Windows.Media.Color =
+                SelectedSolidBrush.Color
+            Me.UpdateBaseValuesFromRGB(SelectedColor.R, SelectedColor.G,
+                                       SelectedColor.B)
+
+        End If
+    End Sub ' DefinedComboBox_SelectionChanged
+
+#End Region ' "Defined Tab Events"
+
+#Region "RGB Tab Events"
+
+    Private Sub RgbTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles RgbTabItem.GotFocus
+
+        ' Only respond on a new arrival here.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        Me.RgbUpdateVisuals()
+
+    End Sub ' RgbTabItem_GotFocus
+
+    Private Sub RgbImage_MouseLeftButtonUp(
+        sender As Object, e As MouseButtonEventArgs) _
+        Handles RgbImage.MouseLeftButtonUp
+
+        Me.RgbProcessMouseClick(sender, e)
+    End Sub ' RgbImage_MouseLeftButtonUp
+
+    Private Sub RedMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles RedMM.Click
+
+        Me.UpdateBaseValuesFromRGB(Me.Down17From(Me.RgbWorkR), Me.RgbWorkG,
+                                   Me.RgbWorkB, LastRgbChangeEnum.Red)
+        Me.RgbUpdateVisuals()
+    End Sub
+
+    Private Sub RedM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles RedM.Click
+
+        If Me.RgbWorkR >= &H0 Then
+            Me.UpdateBaseValuesFromRGB(CByte(Me.RgbWorkR - 1), Me.RgbWorkG,
+                                       Me.RgbWorkB, LastRgbChangeEnum.Red)
+            Me.RgbUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub RedP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles RedP.Click
+
+        If Me.RgbWorkR < &HFF Then
+            Me.UpdateBaseValuesFromRGB(CByte(Me.RgbWorkR + 1), Me.RgbWorkG,
+                                       Me.RgbWorkB, LastRgbChangeEnum.Red)
+            Me.RgbUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub RedPP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles RedPP.Click
+
+        Me.UpdateBaseValuesFromRGB(Me.Up17From(Me.RgbWorkR), Me.RgbWorkG,
+                                   Me.RgbWorkB, LastRgbChangeEnum.Red)
+        Me.RgbUpdateVisuals()
+    End Sub
+
+    Private Sub GreenMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles GreenMM.Click
+
+        Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, Me.Down17From(Me.RgbWorkG),
+                                   Me.RgbWorkB, LastRgbChangeEnum.Green)
+        Me.RgbUpdateVisuals()
+    End Sub
+
+    Private Sub GreenM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles GreenM.Click
+
+        If Me.RgbWorkG > 0 Then
+            Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, CByte(Me.RgbWorkG - 1),
+                                       Me.RgbWorkB, LastRgbChangeEnum.Green)
+            Me.RgbUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub GreenP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles GreenP.Click
+
+        If Me.RgbWorkG < &HFF Then
+            Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, CByte(Me.RgbWorkG + 1),
+                                       Me.RgbWorkB, LastRgbChangeEnum.Green)
+            Me.RgbUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub GreenPP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles GreenPP.Click
+
+        Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, Me.Up17From(Me.RgbWorkG),
+                                   Me.RgbWorkB, LastRgbChangeEnum.Green)
+        Me.RgbUpdateVisuals()
+    End Sub
+
+    Private Sub BlueMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles BlueMM.Click
+
+        Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, Me.RgbWorkG,
+                                   Me.Down17From(Me.RgbWorkB),
+                                   LastRgbChangeEnum.Blue)
+        Me.RgbUpdateVisuals()
+    End Sub
+
+    Private Sub BlueM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles BlueM.Click
+
+        If Me.RgbWorkB >= &H0 Then
+            Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, Me.RgbWorkG,
+                CByte(Me.RgbWorkB - 1), LastRgbChangeEnum.Blue)
+            Me.RgbUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub BlueP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles BlueP.Click
+
+        If Me.RgbWorkB < &HFF Then
+            Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, Me.RgbWorkG,
+                CByte(Me.RgbWorkB + 1), LastRgbChangeEnum.Blue)
+            Me.RgbUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub BluePP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles BluePP.Click
+
+        Me.UpdateBaseValuesFromRGB(Me.RgbWorkR, Me.RgbWorkG,
+            Me.Up17From(Me.RgbWorkB), LastRgbChangeEnum.Blue)
+        Me.RgbUpdateVisuals()
+    End Sub
+
+#End Region ' "RGB Tab Events"
+
+#Region "HSx Tab Events"
+
+    Private Sub HsxTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles HslTabItem.GotFocus, HsvTabItem.GotFocus
+
+        ' Only respond on a new arrival here.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+
+        Dim SendingTabItem As System.Windows.Controls.TabItem =
+            DirectCast(sender, System.Windows.Controls.TabItem)
+        If SendingTabItem.Equals(Me.HslTabItem) Then
+            Me.HslUpdateVisuals()
+        Else
+            Me.HsvUpdateVisuals()
+        End If
+
+    End Sub
+
+    Private Sub HsxSelectHueImage_MouseMove(sender As Object, e As MouseEventArgs) _
+        Handles HslSelectHueImage.MouseMove, HsvSelectHueImage.MouseMove
+
+        Dim SendingImage As System.Windows.Controls.Image =
+            DirectCast(sender, System.Windows.Controls.Image)
+        Me.HsxSelectHueImageProcessMouseMove(SendingImage, e)
+    End Sub ' HsxSelectHueImage_MouseMove
+
+    Private Sub HsxSelectHueImage_MouseLeftButtonUp(
+        sender As Object, e As MouseButtonEventArgs) _
+        Handles HslSelectHueImage.MouseLeftButtonUp,
+          HsvSelectHueImage.MouseLeftButtonUp
+
+        Dim SendingImage As System.Windows.Controls.Image =
+            DirectCast(sender, System.Windows.Controls.Image)
+        Me.HsxHueProcessMouseClick(SendingImage, e)
+    End Sub ' HsxSelectHueImage_MouseLeftButtonUp
+
+    '''' <summary>
+    '''' Covers the Sat/Lum and Sat/Val parts.
+    '''' </summary>
+    '''' <param name="sender"></param>
+    '''' <param name="e"></param>
+    Private Sub HsxSelectSatImage_MouseLeftButtonUp(
+        sender As Object, e As MouseButtonEventArgs) _
+        Handles HslSelectSatLumImage.MouseLeftButtonUp,
+            HsvSelectSatValImage.MouseLeftButtonUp
+
+        Dim SendingImage As System.Windows.Controls.Image =
+            DirectCast(sender, System.Windows.Controls.Image)
+        Me.HsxSatProcessMouseClick(SendingImage, e)
+    End Sub ' HslSelectSatLumImage_MouseLeftButtonUp
+
+#End Region ' "HSx Tab Events"
+
+#Region "Shade Tab Events"
+
+    Private Sub ShadeTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles ShadeTabItem.GotFocus
+
+        ' Only respond on a new arrival at this tab.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+
+            ' Not a new arrival.
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        ' This is a new visit to this tab. Take note of starting conditions.
+        With Me
+
+            ' Take note of entry conditions.
+            .ShadeStartR = RgbWorkR
+            .ShadeStartG = RgbWorkG
+            .ShadeStartB = RgbWorkB
+            .ShadeStartH = .HsvWorkH
+            .ShadeWorkFactor = 0
+
+            ' Hide the display until a factor has been clicked.
+            .ShadeFactorClicked = False
+
+            .ShadeUpdateVisuals()
+
+        End With
+
+    End Sub ' ShadeTabItem_GotFocus
+
+    Private Sub ShadeImage_MouseLeftButtonUp(
+        sender As Object, e As MouseButtonEventArgs) _
+        Handles ShadeImage.MouseLeftButtonUp
+
+        Me.ShadeProcessMouseClick(sender, e)
+    End Sub ' ShadeImage_MouseLeftButtonUp
+
+    Private Sub ShadeMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ShadeMM.Click
+
+        Me.UpdateBaseValuesFromShade(Me.DownPoint01From(Me.ShadeWorkFactor))
+        Me.ShadeUpdateVisuals()
+    End Sub
+
+    Private Sub ShadeM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ShadeM.Click
+
+        Me.UpdateBaseValuesFromShade(Me.DownPoint001From(Me.ShadeWorkFactor))
+        Me.ShadeUpdateVisuals()
+    End Sub
+
+    Private Sub ShadeP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ShadeP.Click
+
+        Me.UpdateBaseValuesFromShade(Me.UpPoint001From(Me.ShadeWorkFactor))
+        Me.ShadeUpdateVisuals()
+    End Sub
+
+    Private Sub ShadePP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ShadePP.Click
+
+        Me.UpdateBaseValuesFromShade(Me.UpPoint01From(Me.ShadeWorkFactor))
+        Me.ShadeUpdateVisuals()
+    End Sub
+
+#End Region ' "Shade Tab Events"
+
+#Region "Tint Tab Events"
+
+    Private Sub TintTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles TintTabItem.GotFocus
+
+        ' Only respond on a new arrival at this tab.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+
+            ' Not a new arrival.
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        ' This is a new visit to this tab. Take note of starting conditions.
+        With Me
+
+            ' Take note of entry conditions.
+            .TintStartR = RgbWorkR
+            .TintStartG = RgbWorkG
+            .TintStartB = RgbWorkB
+            .TintStartH = .HsvWorkH
+            .TintWorkFactor = 0
+
+            ' Hide the display until a factor has been clicked.
+            .TintFactorClicked = False
+
+            .TintUpdateVisuals()
+
+        End With
+
+    End Sub ' TintTabItem_GotFocus
+
+    Private Sub TintImage_MouseLeftButtonUp(
+        sender As Object, e As MouseButtonEventArgs) _
+        Handles TintImage.MouseLeftButtonUp
+
+        Me.TintProcessMouseClick(sender, e)
+    End Sub ' TintImage_MouseLeftButtonUp
+
+    Private Sub TintMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles TintMM.Click
+
+        Me.UpdateBaseValuesFromTint(Me.DownPoint01From(Me.TintWorkFactor))
+        Me.TintUpdateVisuals()
+    End Sub
+
+    Private Sub TintM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles TintM.Click
+
+        Me.UpdateBaseValuesFromTint(Me.DownPoint001From(Me.TintWorkFactor))
+        Me.TintUpdateVisuals()
+    End Sub
+
+    Private Sub TintP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles TintP.Click
+
+        Me.UpdateBaseValuesFromTint(Me.UpPoint001From(Me.TintWorkFactor))
+        Me.TintUpdateVisuals()
+    End Sub
+
+    Private Sub TintPP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles TintPP.Click
+
+        Me.UpdateBaseValuesFromTint(Me.UpPoint01From(Me.TintWorkFactor))
+        Me.TintUpdateVisuals()
+    End Sub
+
+#End Region ' "Tint Tab Events"
+
+#Region "Tone Tab Events"
+
+    Private Sub ToneTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles ToneTabItem.GotFocus
+
+        ' Only respond on a new arrival at this tab.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+
+            ' Not a new arrival.
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        ' This is a new visit to this tab. Take note of starting conditions.
+        With Me
+
+            ' Take note of entry conditions.
+            .ToneStartR = .RgbWorkR
+            .ToneStartG = .RgbWorkG
+            .ToneStartB = .RgbWorkB
+            .ToneStartH = .HsvWorkH
+            .ToneWorkFactor = TONEINITIALFACTOR
+            .ToneWorkGray = TONEINITIALGRAY
+
+            ' Hide the displays until values have been clicked.
+            .ToneValuesClicked = False
+
+            .ToneUpdateVisuals()
+
+        End With
+
+    End Sub ' ToneTabItem_GotFocus
+
+    Private Sub ToneImage_MouseLeftButtonUp(
+        sender As Object, e As MouseButtonEventArgs) _
+        Handles ToneImage.MouseLeftButtonUp
+
+        Me.ToneProcessMouseClick(sender, e)
+    End Sub ' ToneImage_MouseLeftButtonUp
+
+    Private Sub ToneFactorMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneFactorMM.Click
+
+        Me.UpdateBaseValuesFromTone(Me.ToneWorkGray,
+                                    Me.DownPoint01From(Me.ToneWorkFactor))
+        Me.ToneUpdateVisuals()
+    End Sub
+
+    Private Sub ToneFactorM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneFactorM.Click
+
+        Me.UpdateBaseValuesFromTone(Me.ToneWorkGray,
+                                    Me.DownPoint001From(Me.ToneWorkFactor))
+        Me.ToneUpdateVisuals()
+    End Sub
+
+    Private Sub ToneFactorP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneFactorP.Click
+
+        Me.UpdateBaseValuesFromTone(Me.ToneWorkGray,
+                                    Me.UpPoint001From(Me.ToneWorkFactor))
+        Me.ToneUpdateVisuals()
+    End Sub
+
+    Private Sub ToneFactorPP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneFactorPP.Click
+
+        Me.UpdateBaseValuesFromTone(Me.ToneWorkGray,
+                                    Me.UpPoint01From(Me.ToneWorkFactor))
+        Me.ToneUpdateVisuals()
+    End Sub
+
+    Private Sub ToneGrayMM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneGrayMM.Click
+
+        If Me.ToneWorkGray >= &H0 Then
+            Me.UpdateBaseValuesFromTone(Me.Down17From(Me.ToneWorkGray),
+                                        Me.ToneWorkFactor)
+            Me.ToneUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub ToneGrayM_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneGrayM.Click
+
+        If Me.ToneWorkGray >= &H0 Then
+            Me.UpdateBaseValuesFromTone(CByte(Me.ToneWorkGray - 1),
+                                        Me.ToneWorkFactor)
+            Me.ToneUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub ToneGrayP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneGrayP.Click
+
+        If Me.ToneWorkGray < &HFF Then
+            Me.UpdateBaseValuesFromTone(CByte(Me.ToneWorkGray + 1),
+                                        Me.ToneWorkFactor)
+            Me.ToneUpdateVisuals()
+        End If
+    End Sub
+
+    Private Sub ToneGrayPP_Click(sender As Object, e As RoutedEventArgs) _
+        Handles ToneGrayPP.Click
+
+        Me.UpdateBaseValuesFromTone(Me.Up17From(Me.ToneWorkGray),
+                                    Me.ToneWorkFactor)
+        Me.ToneUpdateVisuals()
+    End Sub
+
+#End Region ' "Tone Tab Events"
+
+#Region "Blend Tab Events"
+
+    Private Sub BlendTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
+        Handles BlendTabItem.GotFocus
+
+        ' Only respond on a new arrival here.
+        If (Me.LastFocusTab IsNot Nothing) AndAlso
+            Me.LastFocusTab.Equals(sender) Then
+            Exit Sub ' Early exit.
+        End If
+        Me.LastFocusTab = DirectCast(sender, System.Windows.Controls.TabItem)
+
+        Me.BlendRgb1RedTextBox.Focus()
+        With Me
+
+            .BlendRgb1RedTextBox.Text = RgbWorkR.ToString
+            .BlendRgb1GreenTextBox.Text = RgbWorkG.ToString
+            .BlendRgb1BlueTextBox.Text = RgbWorkB.ToString
+            .BlendRgb1RatioTextBox.Text = BLENDINITIALRGBRATIO1.ToString
+
+            .BlendRgb2RedTextBox.Text = RgbWorkR.ToString
+            .BlendRgb2GreenTextBox.Text = RgbWorkG.ToString
+            .BlendRgb2BlueTextBox.Text = RgbWorkB.ToString
+            .BlendRgb2RatioTextBox.Text = BLENDINITIALRGBRATIO2.ToString
+
+        End With
+
+    End Sub ' BlendTabItem_GotFocus
+
+    Private Sub BlendColorInfoTextBox_TextChanged(
+        sender As Object, e As TextChangedEventArgs) _
+        Handles BlendRgb1RedTextBox.TextChanged,
+            BlendRgb1GreenTextBox.TextChanged,
+            BlendRgb1BlueTextBox.TextChanged,
+            BlendRgb1RatioTextBox.TextChanged,
+            BlendRgb2RedTextBox.TextChanged,
+            BlendRgb2GreenTextBox.TextChanged,
+            BlendRgb2BlueTextBox.TextChanged,
+            BlendRgb2RatioTextBox.TextChanged
+
+        ' Avoid processing before all text boxes have been created in
+        ' initialization.
+        'If Not Me.WindowLoaded Then
+        '    Exit Sub ' Early exit
+        'End If
+        If Not Me.IsLoaded Then
+            Exit Sub ' Early exit
+        End If
+
+        Dim R1, G1, B1, R2, G2, B2 As System.Byte
+        Dim Ratio1, Ratio2 As System.Double
+
+        Dim AllValid As System.Boolean = True ' For now.
+        With Me
+
+            .BlendValidateRgb(BlendRgb1RedTextBox, R1, AllValid)
+            .BlendValidateRgb(BlendRgb1GreenTextBox, G1, AllValid)
+            .BlendValidateRgb(BlendRgb1BlueTextBox, B1, AllValid)
+            .BlendValidateRatio(BlendRgb1RatioTextBox, Ratio1, AllValid)
+
+            .BlendValidateRgb(BlendRgb2RedTextBox, R2, AllValid)
+            .BlendValidateRgb(BlendRgb2GreenTextBox, G2, AllValid)
+            .BlendValidateRgb(BlendRgb2BlueTextBox, B2, AllValid)
+            .BlendValidateRatio(BlendRgb2RatioTextBox, Ratio2, AllValid)
+
+        End With
+        If Not AllValid Then
+            ' Do not process further.
+            Exit Sub ' Early exit.
+        End If
+
+        ' This appears AFTER the validation so that pushes will still set the
+        ' good/bad color.
+        If Me.ConvertTabPushing Then
+            ' Do not process further.
+            Exit Sub ' Early exit.
+        End If
+
+        ' Process the new values.
+        With Me
+
+            Dim NewR, NewG, NewB As System.Byte
+            OSNW.Graphics.ColorUtilities.GetBlend(R1, G1, B1, Ratio1, R2, G2, B2,
+                                              Ratio2, NewR, NewG, NewB)
+            .BlendSetRgbWorkColors(NewR, NewG, NewB)
+
+            .UpdatePreviewLabel()
+
+        End With
+
+    End Sub ' BlendColorInfoTextBox_TextChanged
+
+#End Region ' "Blend Tab Events"
+
+#Region "Bottom Buttons Events"
+
     Private Sub RememberButton_Click(sender As Object, e As RoutedEventArgs) _
         Handles RememberButton.Click
 
@@ -283,6 +972,8 @@ Partial Friend Class ColorDlgWindow
 
         Me.DoRestoreButtonClick()
     End Sub ' RestoreButton_Click
+
+#End Region ' "Bottom Buttons Events"
 
 #End Region ' "Localized Events"
 
