@@ -5,6 +5,7 @@ Option Infer Off
 
 Imports System.Windows
 Imports System.Windows.Controls
+Imports System.Windows.Input
 
 
 ' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
@@ -33,7 +34,6 @@ Imports System.Windows.Controls
 '''' </remarks>
 Friend Class ColorDlgWindow
 
-
     ' These links are from looking into being able to have the dialog window not
     ' be accessible outside of the DLL.
 
@@ -57,15 +57,162 @@ Friend Class ColorDlgWindow
     ' A signal to prevent recursive responses.
     Private SettingSliders As System.Boolean
 
+#Region "Localized Constants"
+
+    ' Something to see on startup.
+    Private Const INITIALR As System.Byte = 64
+    Private Const INITIALG As System.Byte = 128
+    Private Const INITIALB As System.Byte = 192
+
+    ' Components for bad entries in text boxes.
+    Private Const BADTEXTR As System.Byte = 238
+    Private Const BADTEXTG As System.Byte = 170
+    Private Const BADTEXTB As System.Byte = 170
+
+    Private Const TONEINITIALFACTOR As System.Int32 = 0
+    Private Const TONEINITIALGRAY As System.Byte = 192
+
+    Private Const BLENDINITIALRGBRATIO1 As System.Double = 100.0
+    Private Const BLENDINITIALRGBRATIO2 As System.Double = 0.0
+
+    ' Consistent strings.
+    Private Const REDWORD As System.String = "Red"
+    Private Const GREENWORD As System.String = "Green"
+    Private Const BLUEWORD As System.String = "Blue"
+    Private Const HUEWORD As System.String = "Hue"
+
+    ' Frequent reuse and shorthand.
+    Private Const HFF As System.Int32 = &HFF << 24
+
+    ' Reduce screen resize.
+    Private Const DEFINEDCOMBOBOXLABELWIDTH As System.Double = 150.0
+
+#End Region ' Localized Constants
+
+#Region "Localized Types"
+
+    ' Values for LastRgbChange.
+    Private Enum LastRgbChangeEnum
+        Auto ' Causes a calculated choice.
+        Red
+        Green
+        Blue
+    End Enum
+
+    ''' <summary>
+    ''' Packages a <see cref="System.Windows.Media.Color"/> with a name.
+    ''' </summary>
+    Public Class NamedColorPair
+
+        Public Sub New(aName As System.String,
+                       aColor As System.Windows.Media.Color)
+            Me.Name = aName
+            Me.Color = aColor
+        End Sub
+
+        Public ReadOnly Name As System.String
+        Public ReadOnly Color As System.Windows.Media.Color
+
+    End Class ' NamedColorPair
+
+#End Region ' Localized Types
+
+#Region "Localized Variables"
+
+    ' Early exits are used throughout this appplication to reduce excessive
+    '   indentation of If statements.
+
+    ' Use to avoid actions before objects are ready.
+    ' Not being used at this time.
+    '    Private WindowInitialized As System.Boolean = False
+    ' Replaced by reference to Me.IsLoaded.
+    '    Private WindowLoaded As System.Boolean = False
+
+    ' Track whether the last change was red, green, or blue.
+    Private LastRgbChange As LastRgbChangeEnum
+
+    ' Track whether shade/tint factor has been selected at least once.
+    Private ShadeFactorClicked As System.Boolean
+    Private TintFactorClicked As System.Boolean
+    Private ToneValuesClicked As System.Boolean
+
+    ' Representations of the color being modified.
+
+    ' The high precision RGB values used by conversions.
+    Private UnderlyingR As System.Double
+    Private UnderlyingG As System.Double
+    Private UnderlyingB As System.Double
+
+    ' Less precise representations that wind up actually being used for display.
+    Private RgbWorkR As System.Byte
+    Private RgbWorkG As System.Byte
+    Private RgbWorkB As System.Byte
+    Private RgbWorkColor As System.Windows.Media.Color
+    Private RgbWorkSolidBrush As System.Windows.Media.SolidColorBrush
+    Private RgbWorkContrastColor As System.Windows.Media.Color
+    Private RgbWorkContrastSolidBrush As System.Windows.Media.SolidColorBrush
+
+    ' Used for an undo feature.
+    Private RememberR As System.Byte
+    Private RememberG As System.Byte
+    Private RememberB As System.Byte
+
+    ' Flag for when changes are being pushed. Used to suppress reactions.
+    ' Set to True initially until everything is set.
+    Private ConvertTabPushing As System.Boolean = True
+
+    ' Coloring for good/bad text in the Convert and Blend tabs.
+    Private GoodBackgroundBrush As System.Windows.Media.Brush
+    Private BadBackgroundBrush As System.Windows.Media.Brush
+
+    ' HSL equivalent of the working color.
+    Private HslWorkH As System.Double
+    Private HslWorkS As System.Double
+    Private HslWorkL As System.Double
+
+    ' HSV equivalent of the working color.
+    Private HsvWorkH As System.Double
+    Private HsvWorkS As System.Double
+    Private HsvWorkV As System.Double
+
+    ' Values for the shade operations.
+    Private ShadeStartR As System.Byte
+    Private ShadeStartG As System.Byte
+    Private ShadeStartB As System.Byte
+    Private ShadeStartH As System.Double
+    Private ShadeWorkFactor As System.Int32
+
+    ' Values for the tint operations.
+    Private TintStartR As System.Byte
+    Private TintStartG As System.Byte
+    Private TintStartB As System.Byte
+    Private TintStartH As System.Double
+    Private TintWorkFactor As System.Int32
+
+    ' Values for the tone operations.
+    Private ToneStartR As System.Byte
+    Private ToneStartG As System.Byte
+    Private ToneStartB As System.Byte
+    Private ToneStartH As System.Double
+    Private ToneWorkFactor As System.Int32
+    Private ToneWorkGray As System.Byte
+
+    ' Record some original cursors for restoration.
+    Private OriginalHslHueCursor As System.Windows.Input.Cursor
+    Private OriginalHsvHueCursor As System.Windows.Input.Cursor
+
+    ' SomeTab.GotFocus sometimes gets triggered when already on the same tab.
+    ' Use this to recognize when GotFocus occurs on the current tab.
+    Private LastFocusTab As System.Windows.Controls.TabItem
+
+#End Region ' "Localized Variables"
+
 #Region "Properties"
 
     ' In general, properties like these should not need examination by the
     ' setter; that should normally be handled in the associated
     ' <see cref="ColorDialog"/>.
 
-    Public Property Red As System.Byte
-    Public Property Green As System.Byte
-    Public Property Blue As System.Byte
     Public Property ShowConvertTab As System.Boolean
     Public Property ShowDefinedTab As System.Boolean
     Public Property ShowRgbTab As System.Boolean
@@ -75,6 +222,10 @@ Friend Class ColorDlgWindow
     Public Property ShowTintTab As System.Boolean
     Public Property ShowToneTab As System.Boolean
     Public Property ShowBlendTab As System.Boolean
+
+    Public Property Red As System.Byte
+    Public Property Green As System.Byte
+    Public Property Blue As System.Byte
 
 #End Region ' "Properties"
 

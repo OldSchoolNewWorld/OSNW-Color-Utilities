@@ -5,6 +5,7 @@ Option Infer Off
 
 Imports System.Windows
 Imports System.Windows.Controls
+Imports System.Windows.Input
 
 ' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
 ' <projectname>.vbproj file.
@@ -98,6 +99,7 @@ Partial Friend Class ColorDlgWindow
 #Region "Model Events"
 
     ''' <summary>
+    ''' Initializes the control data.
     ''' Occurs when this <c>Window</c> is initialized. Backing fields and local
     ''' variables can usually be set after arriving here. See
     ''' <see cref="System.Windows.FrameworkElement.Initialized"/>.
@@ -105,10 +107,23 @@ Partial Friend Class ColorDlgWindow
     Private Sub Window_Initialized(sender As Object, e As EventArgs) _
         Handles Me.Initialized
 
+        ' No argument checking.
+
+        ''''''''''Try
+        ''''''''''    Me.Do_Window_Initialized(sender, e)
+        Me.DoWindowInitialized()
         Me.ClosingViaOk = False
+        ''''''''''Catch CaughtEx As System.Exception
+        ''''''''''    ' Report the unexpected exception.
+        ''''''''''    Dim CaughtBy As System.Reflection.MethodBase =
+        ''''''''''        System.Reflection.MethodBase.GetCurrentMethod()
+        ''''''''''    Me.ShowExceptionMessageBox(CaughtBy, CaughtEx, sender, e)
+        ''''''''''End Try
+
     End Sub ' Window_Initialized
 
     ''' <summary>
+    ''' Initializes the control data. after having been loaded.
     ''' Occurs when the <c>Window</c> is laid out, rendered, and ready for
     ''' interaction. Sometimes updates have to wait until arriving here. See
     ''' <see cref="System.Windows.FrameworkElement.Loaded"/>.
@@ -116,7 +131,18 @@ Partial Friend Class ColorDlgWindow
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs) _
         Handles Me.Loaded
 
+        ' No argument checking.
+
+        ''''''''''Try
+        ''''''''''    Me.DoWindowLoaded()
         Me.DoWindow_Loaded(sender, e)
+        ''''''''''Catch CaughtEx As System.Exception
+        ''''''''''    ' Report the unexpected exception.
+        ''''''''''    Dim CaughtBy As System.Reflection.MethodBase =
+        ''''''''''        System.Reflection.MethodBase.GetCurrentMethod()
+        ''''''''''    Me.ShowExceptionMessageBox(CaughtBy, CaughtEx, sender, e)
+        ''''''''''End Try
+
     End Sub ' Window_Loaded
 
     ''' <summary>
@@ -202,6 +228,9 @@ Partial Friend Class ColorDlgWindow
     Private Sub OkButton_Click(sender As Object, e As Windows.RoutedEventArgs) _
         Handles OkButton.Click
 
+        ' No argument checking.
+
+        ''''''''Try
         ' Do a local evaluation, or implement and call OkToOk(), to determine
         ' if the current status is suitable for closure.
         If Me.OkToOk() Then
@@ -216,42 +245,45 @@ Partial Friend Class ColorDlgWindow
             ' Display a message?
             ' Ignore the click and wait for Cancel or correction.
         End If
+        ''''''''Catch CaughtEx As System.Exception
+        ''''''''    ' Report the unexpected exception.
+        ''''''''    Dim CaughtBy As System.Reflection.MethodBase =
+        ''''''''        System.Reflection.MethodBase.GetCurrentMethod()
+        ''''''''    Me.ShowExceptionMessageBox(CaughtBy, CaughtEx, sender, e)
+        ''''''''End Try
+
     End Sub ' OkButton_Click
 
 #End Region ' "Model Events"
 
-#Region "Example Events"
-    ' DEV: These events are not intended as part of the model. They are included
-    ' to support operation of the example.
+#Region "Localized Events"
 
-    'Private Sub SliderR_ValueChanged(sender As Object,
-    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-    '    Handles SliderR.ValueChanged
+    Private Sub RememberButton_Click(sender As Object, e As RoutedEventArgs) _
+        Handles RememberButton.Click
 
-    '    If Not Me.SettingSliders Then
-    '        Me.Red = CType(SliderR.Value, System.Byte)
-    '        Me.UpdateVisuals()
-    '    End If
-    'End Sub ' SliderR_ValueChanged
+        With Me
 
-    'Private Sub SliderG_ValueChanged(sender As Object,
-    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-    '    Handles SliderG.ValueChanged
-    '    If Not Me.SettingSliders Then
-    '        Me.Green = CType(SliderG.Value, System.Byte)
-    '        Me.UpdateVisuals()
-    '    End If
-    'End Sub ' SliderG_ValueChanged
+            ' Save the basic components.
+            .RememberR = .RgbWorkR
+            .RememberG = .RgbWorkG
+            .RememberB = .RgbWorkB
 
-    'Private Sub SliderB_ValueChanged(sender As Object,
-    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-    '    Handles SliderB.ValueChanged
-    '    If Not Me.SettingSliders Then
-    '        Me.Blue = CType(SliderB.Value, System.Byte)
-    '        Me.UpdateVisuals()
-    '    End If
-    'End Sub ' SliderB_ValueChanged
+            ' Color, then activate, the restore button.
+            With .RestoreButton
+                .Background = Me.RgbWorkSolidBrush
+                .Foreground = Me.RgbWorkContrastSolidBrush
+                .IsEnabled = True
+            End With
 
-#End Region ' "Example Events"
+        End With
+    End Sub ' RememberButton_Click
+
+    Private Sub RestoreButton_Click(sender As Object, e As RoutedEventArgs) _
+        Handles RestoreButton.Click
+
+        Me.DoRestoreButtonClick()
+    End Sub ' RestoreButton_Click
+
+#End Region ' "Localized Events"
 
 End Class ' ColorDlgWindow

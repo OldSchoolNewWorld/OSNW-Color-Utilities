@@ -2,6 +2,7 @@
 Option Strict On
 Option Compare Binary
 Option Infer Off
+
 Imports OSNW.Graphics
 
 Class MainWindow
@@ -13,6 +14,8 @@ Class MainWindow
     Dim Red As System.Int32
     Dim Green As System.Int32
     Dim Blue As System.Int32
+
+#Region "Model Events"
 
     '''' <summary>
     '''' Occurs when this <c>Window</c> is initialized. Backing fields and local
@@ -46,6 +49,10 @@ Class MainWindow
 
         Me.Close()
     End Sub ' ExitButton_Click
+
+#End Region ' "Model Events"
+
+#Region "Localized Events"
 
     Private Sub SelectButton_Click(sender As Object, e As RoutedEventArgs) _
         Handles SelectButton.Click
@@ -87,15 +94,6 @@ Class MainWindow
 
     End Sub ' SelectButton_Click
 
-    'Private Sub ConvertRgbButton_Click(sender As Object, e As RoutedEventArgs) Handles ConvertRgbButton.Click
-    '    Dim red As Integer = Integer.Parse(Me.ConvertRgbRedTextBox.Text)
-    '    Dim green As Integer = Integer.Parse(Me.ConvertRgbGreenTextBox.Text)
-    '    Dim blue As Integer = Integer.Parse(Me.ConvertRgbBlueTextBox.Text)
-    '    Dim pixels(0, 0) As Integer
-    '    pixels(0, 0) = (255 << 24) Or (red << 16) Or (green << 8) Or blue
-    '    Dim imgSource As System.Windows.Media.Imaging.BitmapSource =
-    '        ColorUtilities.PixelsToImageSource(pixels)
-    '    Me.ConvertedImage.Source = imgSource
-    'End Sub ' ConvertRgbButton_Click
+#End Region ' "Localized Events"
 
 End Class ' MainWindow
