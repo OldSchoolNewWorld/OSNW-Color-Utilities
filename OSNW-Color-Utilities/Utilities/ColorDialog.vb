@@ -776,7 +776,7 @@ Public NotInheritable Class ColorDialog
     ''' (System.Windows.Window.Closed).
     ''' </exception>
     Public Function ShowDialog() As System.Boolean?
-        Dim DlgResult As System.Boolean?
+        Dim Outcome As System.Boolean?
         Dim HostedWindow As New OSNW.Graphics.ColorDlgWindow
         Try
 
@@ -810,8 +810,8 @@ Public NotInheritable Class ColorDialog
             HostedWindow.ShowBlendTab = Me.ShowBlendTab
 
             ' Show the dialog window. Process the result.
-            DlgResult = HostedWindow.ShowDialog
-            If DlgResult Then
+            Outcome = HostedWindow.ShowDialog()
+            If Outcome Then
                 ' Extract any data being returned.
                 Me.Red = HostedWindow.Red
                 Me.Green = HostedWindow.Green
@@ -827,7 +827,8 @@ Public NotInheritable Class ColorDialog
             ' 'HostedWindow'"
             '            HostedWindow = Nothing
         End Try
-        Return DlgResult
+        Me.DialogResult = Outcome
+        Return Outcome
     End Function ' ShowDialog
 
 #End Region ' "Methods"

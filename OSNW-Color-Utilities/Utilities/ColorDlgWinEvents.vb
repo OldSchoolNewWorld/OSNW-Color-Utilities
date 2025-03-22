@@ -221,6 +221,9 @@ Partial Friend Class ColorDlgWindow
         If Me.OkToOk() Then
 
             ' Set any return values.
+            Me.Red = CByte(Me.UnderlyingR)
+            Me.Green = CByte(Me.UnderlyingG)
+            Me.Blue = CByte(Me.UnderlyingB)
 
             ' Get ready to shut down.
             Me.ClosingViaOk = True

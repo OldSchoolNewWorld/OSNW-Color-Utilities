@@ -294,11 +294,6 @@ Friend Class ColorDlgWindow
 
 #End Region ' "Model utilities"
 
-#Region "Event Implementations"
-    ' These routines contain detailed implementations of Event handlers.
-
-#End Region ' "Event Implementations"
-
 #Region "Example Events"
     ' DEV: These events are not intended as part of the model. They are included
     ' to support operation of the example.
