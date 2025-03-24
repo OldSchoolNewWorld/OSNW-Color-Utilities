@@ -172,6 +172,13 @@ Partial Friend Class ColorDlgWindow
             Me.RgbWorkG = Green
             Me.RgbWorkB = Blue
 
+            ' Create an original background color. Establish the bad text color.
+            .GoodBackgroundBrush = .ConvertRgbRedTextBox.Background
+            Dim BadBackgroundColor As New System.Windows.Media.Color With {
+                .A = &HFF, .R = BADTEXTR, .G = BADTEXTG, .B = BADTEXTB}
+            .BadBackgroundBrush =
+                New System.Windows.Media.SolidColorBrush(BadBackgroundColor)
+
             .InitializeTabVisibility()
 
             ' Replaced by reference to Me.IsLoaded.
@@ -183,36 +190,36 @@ Partial Friend Class ColorDlgWindow
             ' Initialize the control data.
             .RestoreButton.IsEnabled = False
 
-            ' Create an original background color. Establish the bad text color.
-            .GoodBackgroundBrush = .ConvertRgbRedTextBox.Background
-            Dim BadBackgroundColor As New System.Windows.Media.Color With {
-                .A = &HFF, .R = BADTEXTR, .G = BADTEXTG, .B = BADTEXTB}
-            .BadBackgroundBrush =
-                New System.Windows.Media.SolidColorBrush(BadBackgroundColor)
-
             ' Record the original cursors that will change when needed.
             .OriginalHslHueCursor = .HslSelectHueImage.Cursor
             .OriginalHsvHueCursor = .HsvSelectHueImage.Cursor
 
             .DefinedInitComboBox()
 
-
-
-
-
-            'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-            ' STEP THROUGH AND SELECT THE FIRST ONE THAT IS VISIBLE.
-
             ' Control which tab shows at startup.
-            .ConvertTabItem.Focus()
-            '.DefinedTabItem.Focus()
-            '.RgbTabItem.Focus()
-            '.HslTabItem.Focus()
-            '.HsvTabItem.Focus()
-            '.ShadeTabItem.Focus()
-            '.TintTabItem.Focus()
-            '.ToneTabItem.Focus()
-            '.BlendTabItem.Focus()
+            If .ConvertTabItem.Visibility = Visibility.Visible Then
+                .ConvertTabItem.Focus()
+            ElseIf .DefinedTabItem.Visibility = Visibility.Visible Then
+                .DefinedTabItem.Focus()
+            ElseIf .RgbTabItem.Visibility = Visibility.Visible Then
+                .RgbTabItem.Focus()
+            ElseIf .HslTabItem.Visibility = Visibility.Visible Then
+                .HslTabItem.Focus()
+            ElseIf .HsvTabItem.Visibility = Visibility.Visible Then
+                .HsvTabItem.Focus()
+            ElseIf .ShadeTabItem.Visibility = Visibility.Visible Then
+                .ShadeTabItem.Focus()
+            ElseIf .TintTabItem.Visibility = Visibility.Visible Then
+                .TintTabItem.Focus()
+            ElseIf .ToneTabItem.Visibility = Visibility.Visible Then
+                .ToneTabItem.Focus()
+            ElseIf .BlendTabItem.Visibility = Visibility.Visible Then
+                .BlendTabItem.Focus()
+            Else
+                ' None marked visible. Force this one.
+                .ConvertTabItem.Visibility = Visibility.Visible
+                .ConvertTabItem.Focus()
+            End If
 
         End With
 
