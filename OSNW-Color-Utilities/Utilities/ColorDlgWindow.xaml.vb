@@ -278,6 +278,7 @@ Friend Class ColorDlgWindow
     ''' Update visual items that reflect the impact of state changes.
     ''' </summary>
     Private Sub UpdateVisuals()
+
         ' DEV: The entries below are speficic the the sample dialog window.
         'Dim BackgroundColor As System.Windows.Media.Color =
         '    System.Windows.Media.Color.FromRgb(Me.Red, Me.Green, Me.Blue)
@@ -288,8 +289,10 @@ Friend Class ColorDlgWindow
         'Me.ColorTextBox.Foreground =
         '    New System.Windows.Media.SolidColorBrush(ForegroundColor)
         'Me.ColorTextBox.Text = $"R:{Me.Red} G:{Me.Green} B:{Me.Blue}"
-        Throw New System.NotImplementedException(
-            $"Thrown by {System.Reflection.MethodBase.GetCurrentMethod}")
+
+        ''''''''Throw New System.NotImplementedException(
+        ''''''''    $"Thrown by {System.Reflection.MethodBase.GetCurrentMethod}")
+
     End Sub ' UpdateVisuals
 
 #End Region ' "Model utilities"

@@ -164,6 +164,14 @@ Partial Friend Class ColorDlgWindow
 
         With Me
 
+            ' Apply the incoming color component set.
+            Me.UnderlyingR = Red
+            Me.UnderlyingG = Green
+            Me.UnderlyingB = Blue
+            Me.RgbWorkR = Red
+            Me.RgbWorkG = Green
+            Me.RgbWorkB = Blue
+
             .InitializeTabVisibility()
 
             ' Replaced by reference to Me.IsLoaded.
@@ -192,10 +200,8 @@ Partial Friend Class ColorDlgWindow
 
 
 
-
-
-
-
+            'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            ' STEP THROUGH AND SELECT THE FIRST ONE THAT IS VISIBLE.
 
             ' Control which tab shows at startup.
             .ConvertTabItem.Focus()
@@ -210,32 +216,26 @@ Partial Friend Class ColorDlgWindow
 
         End With
 
+        ' Update visual items based on the incoming state.
+        With Me
 
+            ' DEV: The specific code here is unique to the sample dialog. The
+            ' underlying reason for the Sub may be of use in certain cases.
 
+            '' Suppress having Red changed when SliderR moves to match Red.
+            '.SettingSliders = True
+            'Try
+            '    .SliderR.Value = .Red
+            '    .SliderG.Value = .Green
+            '    .SliderB.Value = .Blue
+            'Finally
+            '    ' Restore normal slider response.
+            '    .SettingSliders = False
+            'End Try
 
+            .UpdateVisuals()
 
-        '' Update visual items based on the incoming state.
-        'With Me
-
-        '    ' DEV: The specific code here is unique to the sample dialog. The
-        '    ' underlying reason for the Sub may be of use in certain cases.
-
-        '    ' Suppress having Red changed when SliderR moves to match Red.
-        '    .SettingSliders = True
-        '    Try
-        '        .SliderR.Value = .Red
-        '        .SliderG.Value = .Green
-        '        .SliderB.Value = .Blue
-        '    Finally
-        '        ' Restore normal slider response.
-        '        .SettingSliders = False
-        '    End Try
-
-        '    .UpdateVisuals()
-        '    .StringTextBox.Text = .TheString
-        '    .IntegerTextBox.Text = .TheInteger.ToString
-
-        'End With
+        End With
 
 
 

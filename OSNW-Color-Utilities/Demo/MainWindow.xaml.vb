@@ -62,18 +62,15 @@ Class MainWindow
 
             ' Extract the values entered.
             Dim Red As System.Byte =
-            System.Byte.Parse(Me.ConvertRgbRedTextBox.Text)
+                System.Byte.Parse(Me.ConvertRgbRedTextBox.Text)
             Dim Green As System.Byte =
-            System.Byte.Parse(Me.ConvertRgbGreenTextBox.Text)
+                System.Byte.Parse(Me.ConvertRgbGreenTextBox.Text)
             Dim Blue As System.Byte =
-            System.Byte.Parse(Me.ConvertRgbBlueTextBox.Text)
+                System.Byte.Parse(Me.ConvertRgbBlueTextBox.Text)
 
             ' Set up and show dialog.
             Dim Dlg As New OSNW.Graphics.ColorDialog() With {
-                .Owner = Me,
-                .Red = Red,
-                .Green = Green,
-                .Blue = Blue}
+                .Owner = Me, .Red = Red, .Green = Green, .Blue = Blue}
             Dlg.ShowDialog()
 
             If Dlg.DialogResult Then
