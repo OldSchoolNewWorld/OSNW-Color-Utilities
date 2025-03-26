@@ -81,6 +81,7 @@ Imports System.Windows
 Public NotInheritable Class ColorDialog
 
     ' Initialization constants.
+    Const DEFAULTDIALOGTITLE As System.String = "Color Workspace"
     Const DEFAULTSHOWCONVERTTAB As System.Boolean = True
     Const DEFAULTSHOWDEFINEDTAB As System.Boolean = True
     Const DEFAULTSHOWRGBTTAB As System.Boolean = True
@@ -653,7 +654,7 @@ Public NotInheritable Class ColorDialog
             '            .m_Owner = Nothing ' Matches default.
             .m_ResizeMode = ResizeMode.CanResize ' Matches default for a Window.
             '            .m_ShowInTaskbar = False ' Matches default.
-            .m_Title = "SET TITLE!"
+            .m_Title = DEFAULTDIALOGTITLE
             '            .m_WindowStartupLocation =
             '                WindowStartupLocation.Manual ' Matches default.
 
