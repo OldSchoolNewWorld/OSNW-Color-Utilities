@@ -770,18 +770,18 @@ Partial Friend Class ColorDlgWindow
                 Case LastRgbChangeEnum.Red
                     .RgbBaseLabel.Content =
                         $"{ByteValueStr(REDWORD, .RgbWorkR)} Whole"
-                    .RgbXLabel.Content = Green
-                    .RgbYLabel.Content = Blue
+                    .RgbXLabel.Content = GREENWORD
+                    .RgbYLabel.Content = BLUEWORD
                 Case LastRgbChangeEnum.Green
                     .RgbBaseLabel.Content =
                         $"{ByteValueStr(GREENWORD, .RgbWorkG)} Whole"
-                    .RgbXLabel.Content = Red
-                    .RgbYLabel.Content = Blue
+                    .RgbXLabel.Content = REDWORD
+                    .RgbYLabel.Content = BLUEWORD
                 Case Else
                     .RgbBaseLabel.Content =
                         $"{ByteValueStr(BLUEWORD, .RgbWorkB)} Whole"
-                    .RgbXLabel.Content = Red
-                    .RgbYLabel.Content = Green
+                    .RgbXLabel.Content = REDWORD
+                    .RgbYLabel.Content = GREENWORD
             End Select
 
             ' Update the displayed per-component values.
