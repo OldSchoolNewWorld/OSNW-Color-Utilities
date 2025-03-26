@@ -779,59 +779,53 @@ Public NotInheritable Class ColorDialog
     ''' (System.Windows.Window.Closed).
     ''' </exception>
     Public Function ShowDialog() As System.Boolean?
-        Dim Outcome As System.Boolean?
+        Dim DlgResult As System.Boolean?
+#Disable Warning IDE0017 ' Simplify object initialization
         Dim HostedWindow As New OSNW.Graphics.ColorDlgWindow
-        Try
+#Enable Warning IDE0017 ' Simplify object initialization
 
-            ' Set the model properties that get sent to the window.
+        ' Set the model properties that get sent to the window.
 
-            HostedWindow.Owner = Me.Owner
-            HostedWindow.ResizeMode = Me.ResizeMode
-            HostedWindow.ShowInTaskbar = Me.ShowInTaskbar
-            HostedWindow.Title = Me.Title
-            HostedWindow.WindowStartupLocation = Me.WindowStartupLocation
+        ' Set the dialog model properties that get sent to the window.
+        HostedWindow.Owner = Me.Owner
+        HostedWindow.ResizeMode = Me.ResizeMode
+        HostedWindow.ShowInTaskbar = Me.ShowInTaskbar
+        HostedWindow.Title = Me.Title
+        HostedWindow.WindowStartupLocation = Me.WindowStartupLocation
 
-            ' Only push .Icon if it has been set in the ColorDialog.
-            If Me.Icon IsNot Nothing Then
-                HostedWindow.Icon = Me.Icon
-            End If
+        ' Only push .Icon if it has been set in the ColorDialog.
+        If Me.Icon IsNot Nothing Then
+            HostedWindow.Icon = Me.Icon
+        End If
 
-            ' Set the localized properties that get sent to the window.
+        ' Set the localized properties that get sent to the window.
+        HostedWindow.Red = Me.Red
+        HostedWindow.Green = Me.Green
+        HostedWindow.Blue = Me.Blue
+        HostedWindow.ShowConvertTab = Me.ShowConvertTab
+        HostedWindow.ShowDefinedTab = Me.ShowDefinedTab
+        HostedWindow.ShowRgbTab = Me.ShowRgbTab
+        HostedWindow.ShowHslTab = Me.ShowHslTab
+        HostedWindow.ShowHsvTab = Me.ShowHsvTab
+        HostedWindow.ShowShadeTab = Me.ShowShadeTab
+        HostedWindow.ShowTintTab = Me.ShowTintTab
+        HostedWindow.ShowToneTab = Me.ShowToneTab
+        HostedWindow.ShowBlendTab = Me.ShowBlendTab
 
-            HostedWindow.Red = Me.Red
-            HostedWindow.Green = Me.Green
-            HostedWindow.Blue = Me.Blue
+        ' Show the dialog window. Process the result.
+        DlgResult = HostedWindow.ShowDialog()
+        If DlgResult Then
+            ' Extract any data being returned.
+            Me.Red = HostedWindow.Red
+            Me.Green = HostedWindow.Green
+            Me.Blue = HostedWindow.Blue
+            'Else
+            '' Is anything needed when ShowDialog is false?
+        End If
 
-            HostedWindow.ShowConvertTab = Me.ShowConvertTab
-            HostedWindow.ShowDefinedTab = Me.ShowDefinedTab
-            HostedWindow.ShowRgbTab = Me.ShowRgbTab
-            HostedWindow.ShowHslTab = Me.ShowHslTab
-            HostedWindow.ShowHsvTab = Me.ShowHsvTab
-            HostedWindow.ShowShadeTab = Me.ShowShadeTab
-            HostedWindow.ShowTintTab = Me.ShowTintTab
-            HostedWindow.ShowToneTab = Me.ShowToneTab
-            HostedWindow.ShowBlendTab = Me.ShowBlendTab
+        Me.DialogResult = DlgResult
+        Return DlgResult
 
-            ' Show the dialog window. Process the result.
-            Outcome = HostedWindow.ShowDialog()
-            If Outcome Then
-                ' Extract any data being returned.
-                Me.Red = HostedWindow.Red
-                Me.Green = HostedWindow.Green
-                Me.Blue = HostedWindow.Blue
-                'Else
-                '' Is anything needed when ShowDialog is false?
-            End If
-
-        Finally
-            ' DISPOSE OF THE WINDOW?????? SET TO NOTHING ENOUGH TO GET RID OF AT
-            ' LEAST THE WINDOW????? JUST LET THE WINDOW GO OUT OF SCOPE?????
-            ' SETTING TO NOTHING WARNS "Unnecessary assignment of a value to
-            ' 'HostedWindow'"
-            '            HostedWindow = Nothing
-        End Try
-        Me.DialogResult = Outcome
-        Return Outcome
     End Function ' ShowDialog
 
 #End Region ' "Methods"

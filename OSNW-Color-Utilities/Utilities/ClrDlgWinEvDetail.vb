@@ -144,17 +144,6 @@ Partial Friend Class ColorDlgWindow
             '            ' Signal that Window_Initialized already happened.
             '            .WindowInitialized = True
 
-            ' Initialize the color data.
-
-            .UnderlyingR = INITIALR
-            .UnderlyingG = INITIALG
-            .UnderlyingB = INITIALB
-            .UpdateBaseValuesFromRGB(.UnderlyingR, .UnderlyingG, .UnderlyingB)
-
-            .RgbWorkR = INITIALR ' DONE ABOVE ???????????????????????
-            .RgbWorkG = INITIALG ' DONE ABOVE ???????????????????????
-            .RgbWorkB = INITIALB ' DONE ABOVE ???????????????????????
-
         End With
     End Sub ' Do_Window_Initialized
 
@@ -165,12 +154,12 @@ Partial Friend Class ColorDlgWindow
         With Me
 
             ' Apply the incoming color component set.
-            Me.UnderlyingR = Red
-            Me.UnderlyingG = Green
-            Me.UnderlyingB = Blue
-            Me.RgbWorkR = Red
-            Me.RgbWorkG = Green
-            Me.RgbWorkB = Blue
+            .UnderlyingR = .Red
+            .UnderlyingG = .Green
+            .UnderlyingB = .Blue
+
+            ' Initialize the color data.
+            .UpdateBaseValuesFromRGB(.UnderlyingR, .UnderlyingG, .UnderlyingB)
 
             ' Create an original background color. Establish the bad text color.
             .GoodBackgroundBrush = .ConvertRgbRedTextBox.Background

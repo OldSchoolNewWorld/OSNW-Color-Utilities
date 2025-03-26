@@ -58,11 +58,6 @@ Friend Class ColorDlgWindow
 
 #Region "Localized Constants"
 
-    ' Something to see on startup.
-    Private Const INITIALR As System.Byte = 64
-    Private Const INITIALG As System.Byte = 128
-    Private Const INITIALB As System.Byte = 192
-
     ' Components for bad entries in text boxes.
     Private Const BADTEXTR As System.Byte = 238
     Private Const BADTEXTG As System.Byte = 170
@@ -208,9 +203,20 @@ Friend Class ColorDlgWindow
 
 #Region "Properties"
 
-    ' In general, properties like these should not need examination by the
-    ' setter; that should normally be handled in the associated
-    ' <see cref="ColorDialog"/>.
+    ''' <summary>
+    ''' Represents the red component passed to and from the dialog window.
+    ''' </summary>
+    Public Property Red As System.Byte
+
+    ''' <summary>
+    ''' Represents the green component passed to and from the dialog window.
+    ''' </summary>
+    Public Property Green As System.Byte
+
+    ''' <summary>
+    ''' Represents the blue component passed to and from the dialog window.
+    ''' </summary>
+    Public Property Blue As System.Byte
 
     ''' <summary>
     ''' Specifies whether to show the 'Convert' tab when the dialog starts.
@@ -274,10 +280,6 @@ Friend Class ColorDlgWindow
     ''' <remarks>This is only checked at startup. It is not passed to change an
     ''' open dialog.</remarks>
     Public Property ShowBlendTab As System.Boolean
-
-    Public Property Red As System.Byte
-    Public Property Green As System.Byte
-    Public Property Blue As System.Byte
 
 #End Region ' "Properties"
 
