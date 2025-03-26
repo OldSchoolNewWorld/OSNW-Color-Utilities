@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Demo"
         mc:Ignorable="d"
-        Title="Develop Visuals" SizeToContent="WidthAndHeight"
+        Title="ColorDialog Demo" SizeToContent="WidthAndHeight" MinWidth="285"
         WindowStartupLocation="CenterScreen">
     <DockPanel x:Name="MainDockPanel" LastChildFill="True">
 
@@ -21,7 +21,8 @@
 
         <DockPanel x:Name="TopDockPanel" DockPanel.Dock="Bottom"
                    LastChildFill="True">
-            <DockPanel x:Name="ConvertRgbStackPanel">
+            <DockPanel x:Name="ConvertRgbStackPanel" LastChildFill="False"
+                       HorizontalAlignment="Center">
                 <StackPanel x:Name="RedStackPanel" DockPanel.Dock="Left" Margin="3,3,0,3">
                     <Label>Red</Label>
                     <TextBox x:Name="ConvertRgbRedTextBox" Text="RgbRed"

@@ -12,48 +12,17 @@ Imports System.Windows
 
 'Imports System.Reflection
 
-' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
-' <projectname>.vbproj file.
-'   https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-desktop
-'   Maybe just include PresentationFramework.dll? Or System.Windows?
-
 ''' <summary>
-''' DEV: Represents a model for a shell that exposes minimal features of a WPF
-''' dialog displayed as a <see cref="System.Windows.Window"/>.
+''' Represents dialog that can be used for color selection or just to tinker
+''' with various color spaces and manipulations.
 ''' </summary>
 ''' <remarks>
-''' DEV:<para>
-''' A <c>ColorDialog</c> creates a layer of abstraction between its underlying
-''' <see cref="ColorDlgWindow"/> and the consuming assembly.
-''' <see cref="ColorDlgWindow"/> is designated as <c>Friend</c> and its XAML
-''' contains <c>x:ClassModifier="Friend"</c>; it is only directly available to
-''' the associated <c>ColorDialog</c>. Public members of
-''' <see cref="System.Windows.Window"/> are not reachable by the consuming
-''' assembly unless exposed by the <c>ColorDialog</c>.
-''' </para>
-''' <para>
-''' <c>ColorDialog</c> is marked "NotInheritable" because it is intended as a
-''' model, not as a base type. It is created as a reusable (available from a
-''' DLL) class that hosts a specific dialog window. It is not dedicated to
-''' consumption by any particular assembly.
-''' </para>
-''' <para>
-''' A <c>ColorDialog</c> is a shell that isolates the window itself, hiding most
-''' features of System.Windows.Window. Necessary System.Windows.Window features
-''' can be exposed as pass-through accessors.
-''' </para>
-''' <para>
-''' This class would need to expose certain Window properties and methods to be
-''' used by the calling assembly. Items likely to be desirable for access from
-''' the consuming assembly include: Icon, Owner, ShowInTaskbar, Title,
-''' WindowStartupLocation, ShowDialog(), and DialogResult.
-''' </para>
 ''' <example> This sample shows how to use a <c>ColorDialog</c>. NOTE:
 ''' "OSNW.Graphics.ColorDialog" only refers to the model included here; it is not
 ''' intended as a base type. Change the name to suit the the new implementation.
 ''' <code>
 ''' 
-''' Imports .Graphics
+''' Imports OSNW.Graphics
 ''' 
 ''' ' Set up the dialog.
 ''' Dim Dlg As New OSNW.Graphics.ColorDialog With {
@@ -72,13 +41,13 @@ Imports System.Windows
 '''     ' Update the visuals.
 ''' 
 '''     'Else
-'''     '' Is anything needed when ShowDialog is false?
+'''     '' Is anything needed when ShowDialog is False?
 ''' End If
 ''' 
 ''' </code>
 ''' </example>
 ''' </remarks>
-Public NotInheritable Class ColorDialog
+Public Class ColorDialog
 
     ' Initialization constants.
     Const DEFAULTDIALOGTITLE As System.String = "Color Workspace"
