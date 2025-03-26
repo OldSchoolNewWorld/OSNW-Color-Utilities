@@ -20,16 +20,16 @@ Imports System.Windows.Input
 '   be ignored."
 '
 '''' <summary>
-'''' Represents a model for the window displayed by a <see cref="DialogHost"/>.
+'''' Represents a model for the window displayed by a <see cref="ColorDialog"/>.
 '''' </summary>
 '''' <remarks>
-'''' A <see cref="DialogHost"/> creates a layer of abstraction between its
-'''' underlying <c>HostedDialogWindow</c> and the consuming assembly.
-'''' <c>HostedDialogWindow</c> is designated as <c>Friend</c> and its XAML
+'''' A <see cref="ColorDialog"/> creates a layer of abstraction between its
+'''' underlying <c>ColorDlgWindow</c> and the consuming assembly.
+'''' <c>ColorDlgWindow</c> is designated as <c>Friend</c> and its XAML
 '''' contains <c>x:ClassModifier="Friend"</c>; it is only directly available to
-'''' the associated <see cref="DialogHost"/>. Public members of
+'''' the associated <see cref="ColorDialog"/>. Public members of
 '''' <see cref="System.Windows.Window"/> are not reachable by the consuming
-'''' assembly unless exposed by the <see cref="DialogHost"/>.
+'''' assembly unless exposed by the <see cref="ColorDialog"/>.
 '''' </remarks>
 Partial Friend Class ColorDlgWindow
 

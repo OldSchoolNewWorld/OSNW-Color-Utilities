@@ -7,10 +7,10 @@ Imports System.ComponentModel
 Imports System.IO
 Imports System.Windows
 
-'Imports System.ComponentModel
-'Imports System.IO
+' REF: OSNW-WPF-Custom-Dialog-Models
+' https://github.com/OldSchoolNewWorld/OSNW-WPF-Custom-Dialog-Models
+
 'Imports System.Reflection
-'Imports System.Windows
 
 ' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
 ' <projectname>.vbproj file.
@@ -23,22 +23,22 @@ Imports System.Windows
 ''' </summary>
 ''' <remarks>
 ''' DEV:<para>
-''' A <c>DialogHost</c> creates a layer of abstraction between its underlying
+''' A <c>ColorDialog</c> creates a layer of abstraction between its underlying
 ''' <see cref="ColorDlgWindow"/> and the consuming assembly.
 ''' <see cref="ColorDlgWindow"/> is designated as <c>Friend</c> and its XAML
 ''' contains <c>x:ClassModifier="Friend"</c>; it is only directly available to
-''' the associated <c>DialogHost</c>. Public members of
+''' the associated <c>ColorDialog</c>. Public members of
 ''' <see cref="System.Windows.Window"/> are not reachable by the consuming
-''' assembly unless exposed by the <c>DialogHost</c>.
+''' assembly unless exposed by the <c>ColorDialog</c>.
 ''' </para>
 ''' <para>
-''' <c>DialogHost</c> is marked "NotInheritable" because it is intended as a
+''' <c>ColorDialog</c> is marked "NotInheritable" because it is intended as a
 ''' model, not as a base type. It is created as a reusable (available from a
 ''' DLL) class that hosts a specific dialog window. It is not dedicated to
 ''' consumption by any particular assembly.
 ''' </para>
 ''' <para>
-''' A <c>DialogHost</c> is a shell that isolates the window itself, hiding most
+''' A <c>ColorDialog</c> is a shell that isolates the window itself, hiding most
 ''' features of System.Windows.Window. Necessary System.Windows.Window features
 ''' can be exposed as pass-through accessors.
 ''' </para>
@@ -48,15 +48,15 @@ Imports System.Windows
 ''' the consuming assembly include: Icon, Owner, ShowInTaskbar, Title,
 ''' WindowStartupLocation, ShowDialog(), and DialogResult.
 ''' </para>
-''' <example> This sample shows how to use a <c>DialogHost</c>. NOTE:
-''' "OSNW.Dialog.DialogHost" only refers to the model included here; it is not
+''' <example> This sample shows how to use a <c>ColorDialog</c>. NOTE:
+''' "OSNW.Graphics.ColorDialog" only refers to the model included here; it is not
 ''' intended as a base type. Change the name to suit the the new implementation.
 ''' <code>
 ''' 
-''' Imports OSNW.Dialog
+''' Imports .Graphics
 ''' 
 ''' ' Set up the dialog.
-''' Dim Dlg As New OSNW.Dialog.DialogHost With {
+''' Dim Dlg As New OSNW.Graphics.ColorDialog With {
 '''     .Owner = Me,
 '''     .ShowInTaskbar = False,
 '''     .Title = "Dialog Hosted by a Class",
@@ -93,23 +93,8 @@ Public NotInheritable Class ColorDialog
 
 #Region "Properties"
 
-    ' DEV: These specific properties are not intended as part of the model. They
-    ' are included to support operation of the example. In general, examination
-    ' by the setter should normally be handled here before passing data to the
-    ' window.
-    Public Property Red As System.Byte
-    Public Property Green As System.Byte
-    Public Property Blue As System.Byte
-
-
-
-    'xxxxxxxxxxxxxxxx ADD PROPERTIES TO CONTROL WHICH TABS ARE SHOWN.
-
-
-#End Region ' "Properties"
-
-#Region "Model pass-through properties"
-    ' These are properties for a HostedDialogWindow that does not always exist.
+#Region "Model Pass-through Properties"
+    ' These are properties for a ColorDlgWindow that does not always exist.
     ' They are passed to the Window when it gets created.
 
     Private m_DialogResult As System.Boolean?
@@ -145,7 +130,7 @@ Public NotInheritable Class ColorDialog
     ''' <returns>
     ''' A System.Windows.Media.ImageSource object that represents the icon.
     ''' </returns>
-    ''' <remarks>DEV: The HostedDialogWindow has a default icon set to
+    ''' <remarks>DEV: The ColorDlgWindow has a default icon set to
     ''' "Dialog.ico". Use the <c>Icon</c> property to override it.</remarks>
     Property Icon As System.Windows.Media.ImageSource
         Get
@@ -259,9 +244,24 @@ Public NotInheritable Class ColorDialog
         End Set
     End Property
 
-#End Region ' "Model pass-through properties"
+#End Region ' "Model Pass-through Properties"
 
-#Region "Localized pass-through properties"
+#Region "Localized Pass-through Properties"
+
+    ''' <summary>
+    ''' Represents the red component of a color.
+    ''' </summary>
+    Public Property Red As System.Byte
+
+    ''' <summary>
+    ''' Represents the green component of a color.
+    ''' </summary>
+    Public Property Green As System.Byte
+
+    ''' <summary>
+    ''' Represents the blue component of a color.
+    ''' </summary>
+    Public Property Blue As System.Byte
 
     Private m_ShowConvertTab As System.Boolean
     ''' <summary>
@@ -380,9 +380,11 @@ Public NotInheritable Class ColorDialog
         End Set
     End Property
 
-#End Region ' "Localized pass-through properties"
+#End Region ' "Localized Pass-through Properties"
 
-#Region "Exception handling"
+#End Region ' "Properties"
+
+#Region "Exception Handling"
 
     ''' <summary>
     ''' Reports an invalid call to one of the
@@ -395,7 +397,7 @@ Public NotInheritable Class ColorDialog
     ''' This is for invalid calls to
     ''' <c>ShowExceptionMessageBox(&lt;varies&gt;)</c>, not for generic invalid
     ''' procedure calls.
-    ''' Note: A <c>DialogHost</c> is not a <c>Window</c>; it cannot be used as
+    ''' Note: A <c>ColorDialog</c> is not a <c>Window</c>; it cannot be used as
     ''' the <c>owner</c> of the <c>MessageBox</c>. The reference here is changed
     ''' to <c>Me.Owner</c>, which is a <c>Window</c>.
     ''' </remarks>
@@ -440,7 +442,7 @@ Public NotInheritable Class ColorDialog
     ''' <param name="techDetails">Specifies detailed information about the 
     ''' exception.</param>
     ''' <remarks>
-    ''' Note: A <c>DialogHost</c> is not a <c>Window</c>; it cannot be used as
+    ''' Note: A <c>ColorDialog</c> is not a <c>Window</c>; it cannot be used as
     ''' the <c>owner</c> of the <c>MessageBox</c>. The reference here is changed
     ''' to <c>Me.Owner</c>, which is a <c>Window</c>.
     ''' </remarks>
@@ -508,9 +510,9 @@ Public NotInheritable Class ColorDialog
 
     End Sub ' ShowExceptionMessageBox
 
-#End Region ' "Exception handling"
+#End Region ' "Exception Handling"
 
-#Region "Constructor helpers"
+#Region "Constructor Helpers"
 
     ''' <summary>
     ''' A helper class to convert image data.
@@ -633,7 +635,7 @@ Public NotInheritable Class ColorDialog
 
     End Function ' GetIconFromResource
 
-#End Region ' "Constructor helpers"
+#End Region ' "Constructor Helpers"
 
 #Region "Constructors"
 
@@ -655,7 +657,7 @@ Public NotInheritable Class ColorDialog
             '            .m_WindowStartupLocation =
             '                WindowStartupLocation.Manual ' Matches default.
 
-            ' Set the initial tab visibility.
+            ' Set the initial tab visibility to defaults.
             .m_ShowConvertTab = DEFAULTSHOWCONVERTTAB
             .m_ShowDefinedTab = DEFAULTSHOWDEFINEDTAB
             .m_ShowRgbTab = DEFAULTSHOWRGBTTAB
@@ -666,13 +668,13 @@ Public NotInheritable Class ColorDialog
             .m_ShowToneTab = DEFAULTSHOWTONETAB
             .m_ShowBlendTab = DEFAULTSHOWBLENDTAB
 
-            ' DEV: The HostedDialogWindow is configured with a default icon that
-            ' is set in its XAML layout. If m_Icon for the DialogHost is left at
+            ' DEV: The ColorDlgWindow is configured with a default icon that
+            ' is set in its XAML layout. If m_Icon for the ColorDialog is left at
             ' the default Nothing/Null, the XAML entry will be left in place.
             ' m_Icon can be set here and it will override the XAML setting.
             ' The consuming assembly can override Icon after New() and it
             ' will override the setting in New().
-            ' Any non-Nothing/Null will be passed to the HostedDialogWindow at
+            ' Any non-Nothing/Null will be passed to the ColorDlgWindow at
             ' display time.
 
             ' Programmatic ways to load an icon.
@@ -788,7 +790,7 @@ Public NotInheritable Class ColorDialog
             HostedWindow.Title = Me.Title
             HostedWindow.WindowStartupLocation = Me.WindowStartupLocation
 
-            ' Only push .Icon if it has been set in the DialogHost.
+            ' Only push .Icon if it has been set in the ColorDialog.
             If Me.Icon IsNot Nothing Then
                 HostedWindow.Icon = Me.Icon
             End If

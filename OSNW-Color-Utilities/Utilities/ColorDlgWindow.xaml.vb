@@ -7,7 +7,6 @@ Imports System.Windows
 Imports System.Windows.Controls
 Imports System.Windows.Input
 
-
 ' NOTE: <UseWPF>true</UseWPF> may need to be added to the dialogs'
 ' <projectname>.vbproj file.
 '   https://learn.microsoft.com/en-us/dotnet/core/project-sdk/msbuild-props-desktop
@@ -21,16 +20,16 @@ Imports System.Windows.Input
 '   be ignored."
 '
 '''' <summary>
-'''' Represents a model for the window displayed by a <see cref="DialogHost"/>.
+'''' Represents a model for the window displayed by a <see cref="ColorDialog"/>.
 '''' </summary>
 '''' <remarks>
-'''' A <see cref="DialogHost"/> creates a layer of abstraction between its
-'''' underlying <c>HostedDialogWindow</c> and the consuming assembly.
-'''' <c>HostedDialogWindow</c> is designated as <c>Friend</c> and its XAML
+'''' A <see cref="ColorDialog"/> creates a layer of abstraction between its
+'''' underlying <c>ColorDlgWindow</c> and the consuming assembly.
+'''' <c>ColorDlgWindow</c> is designated as <c>Friend</c> and its XAML
 '''' contains <c>x:ClassModifier="Friend"</c>; it is only directly available to
-'''' the associated <see cref="DialogHost"/>. Public members of
+'''' the associated <see cref="ColorDialog"/>. Public members of
 '''' <see cref="System.Windows.Window"/> are not reachable by the consuming
-'''' assembly unless exposed by the <see cref="DialogHost"/>.
+'''' assembly unless exposed by the <see cref="ColorDialog"/>.
 '''' </remarks>
 Friend Class ColorDlgWindow
 
@@ -49,7 +48,7 @@ Friend Class ColorDlgWindow
     ' REF: x:ClassModifier Directive
     ' https://learn.microsoft.com/en-us/dotnet/desktop/xaml-services/xclassmodifier-directive
     ' For Microsoft Visual Basic .NET, the string to pass to designate TypeAttributes.NotPublic is Friend.
-    ' That is done in HostedDialogWindow.xaml.
+    ' That is done in ColorDlgWindow.xaml.
 
     ' A signal to distinguish between aborts and acceptance, at closure.
     Private ClosingViaOk As System.Boolean
@@ -213,14 +212,67 @@ Friend Class ColorDlgWindow
     ' setter; that should normally be handled in the associated
     ' <see cref="ColorDialog"/>.
 
+    ''' <summary>
+    ''' Specifies whether to show the 'Convert' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowConvertTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'Defined' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowDefinedTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'RGB' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowRgbTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'HSL' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowHslTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'HSV' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowHsvTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'Shade' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowShadeTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'Tinr' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowTintTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'Tone' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowToneTab As System.Boolean
+
+    ''' <summary>
+    ''' Specifies whether to show the 'Blend' tab when the dialog starts.
+    ''' </summary>
+    ''' <remarks>This is only checked at startup. It is not passed to change an
+    ''' open dialog.</remarks>
     Public Property ShowBlendTab As System.Boolean
 
     Public Property Red As System.Byte
@@ -296,39 +348,5 @@ Friend Class ColorDlgWindow
     End Sub ' UpdateVisuals
 
 #End Region ' "Model utilities"
-
-#Region "Example Events"
-    ' DEV: These events are not intended as part of the model. They are included
-    ' to support operation of the example.
-
-    'Private Sub SliderR_ValueChanged(sender As Object,
-    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-    '    Handles SliderR.ValueChanged
-
-    '    If Not Me.SettingSliders Then
-    '        Me.Red = CType(SliderR.Value, System.Byte)
-    '        Me.UpdateVisuals()
-    '    End If
-    'End Sub ' SliderR_ValueChanged
-
-    'Private Sub SliderG_ValueChanged(sender As Object,
-    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-    '    Handles SliderG.ValueChanged
-    '    If Not Me.SettingSliders Then
-    '        Me.Green = CType(SliderG.Value, System.Byte)
-    '        Me.UpdateVisuals()
-    '    End If
-    'End Sub ' SliderG_ValueChanged
-
-    'Private Sub SliderB_ValueChanged(sender As Object,
-    '    e As RoutedPropertyChangedEventArgs(Of System.Double)) _
-    '    Handles SliderB.ValueChanged
-    '    If Not Me.SettingSliders Then
-    '        Me.Blue = CType(SliderB.Value, System.Byte)
-    '        Me.UpdateVisuals()
-    '    End If
-    'End Sub ' SliderB_ValueChanged
-
-#End Region ' "Example Events"
 
 End Class ' ColorDlgWindow

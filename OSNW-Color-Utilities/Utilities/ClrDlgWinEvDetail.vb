@@ -223,29 +223,26 @@ Partial Friend Class ColorDlgWindow
 
         End With
 
-        ' Update visual items based on the incoming state.
-        With Me
+        '' Update visual items based on the incoming state.
+        'With Me
 
-            ' DEV: The specific code here is unique to the sample dialog. The
-            ' underlying reason for the Sub may be of use in certain cases.
+        '    ' DEV: The specific code here is unique to the sample dialog. The
+        '    ' underlying reason for the Sub may be of use in certain cases.
 
-            '' Suppress having Red changed when SliderR moves to match Red.
-            '.SettingSliders = True
-            'Try
-            '    .SliderR.Value = .Red
-            '    .SliderG.Value = .Green
-            '    .SliderB.Value = .Blue
-            'Finally
-            '    ' Restore normal slider response.
-            '    .SettingSliders = False
-            'End Try
+        '    '' Suppress having Red changed when SliderR moves to match Red.
+        '    '.SettingSliders = True
+        '    'Try
+        '    '    .SliderR.Value = .Red
+        '    '    .SliderG.Value = .Green
+        '    '    .SliderB.Value = .Blue
+        '    'Finally
+        '    '    ' Restore normal slider response.
+        '    '    .SettingSliders = False
+        '    'End Try
 
-            .UpdateVisuals()
+        '    .UpdateVisuals()
 
-        End With
-
-
-
+        'End With
 
         '''''''''''Catch CaughtEx As System.Exception
         '''''''''''    ' Report the unexpected exception.
@@ -253,14 +250,6 @@ Partial Friend Class ColorDlgWindow
         '''''''''''        System.Reflection.MethodBase.GetCurrentMethod()
         '''''''''''    Me.ShowExceptionMessageBox(CaughtBy, CaughtEx, sender, e)
         '''''''''''End Try
-
-
-
-
-
-
-
-
 
     End Sub ' Do_Window_Loaded
 

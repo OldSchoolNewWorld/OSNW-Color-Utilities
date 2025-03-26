@@ -69,7 +69,7 @@ Class MainWindow
                 System.Byte.Parse(Me.ConvertRgbBlueTextBox.Text)
 
             ' Set up and show dialog.
-            Dim Dlg As New OSNW.Graphics.ColorDialog() With {
+            Dim Dlg As New OSNW.Graphics.ColorDialog With {
                 .Owner = Me, .Red = Red, .Green = Green, .Blue = Blue}
             Dlg.ShowDialog()
 
