@@ -4,6 +4,8 @@ Option Compare Binary
 Option Infer Off
 
 'TODO:
+' Convert to new exception handling model.
+'   Check #Region "Exception Handling" in ColorDialog.vb.
 ' Convert the test app to use a dialog based on the current test app's main window.
 '   Ref: Creating a custom input dialog
 '   https://wpf-tutorial.com/dialogs/creating-a-custom-input-dialog/

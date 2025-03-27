@@ -13,13 +13,14 @@ Imports System.Windows
 'Imports System.Reflection
 
 ''' <summary>
-''' Represents dialog that can be used for color selection or just to tinker
-''' with various color spaces and manipulations.
+''' Represents a dialog that can be used for color selection or just to tinker
+''' with various color-spaces and -manipulations.
 ''' </summary>
 ''' <remarks>
-''' <example> This sample shows how to use a <c>ColorDialog</c>. NOTE:
-''' "OSNW.Graphics.ColorDialog" only refers to the model included here; it is not
-''' intended as a base type. Change the name to suit the the new implementation.
+''' <example> This example shows how to use a <c>ColorDialog</c>. NOTE:
+''' "OSNW.Graphics.ColorDialog" only refers to the model included here; it is
+''' not intended as a base type. Change the name to suit the the new
+''' implementation.
 ''' <code>
 ''' 
 ''' Imports OSNW.Graphics
@@ -28,7 +29,7 @@ Imports System.Windows
 ''' Dim Dlg As New OSNW.Graphics.ColorDialog With {
 '''     .Owner = Me,
 '''     .ShowInTaskbar = False,
-'''     .Title = "Dialog Hosted by a Class",
+'''     .Title = "Color Workspace",
 '''     .WindowStartupLocation =
 '''         System.Windows.WindowStartupLocation.CenterScreen}
 ''' 
@@ -64,8 +65,9 @@ Public Class ColorDialog
 #Region "Properties"
 
 #Region "Model Pass-through Properties"
-    ' These are properties for a ColorDlgWindow that does not always exist.
-    ' They are passed to the Window when it gets created.
+    ' These are properties for a ColorDlgWindow that does not exist until
+    ' created by the host ColorDialog. They are passed to the Window when it
+    ' gets created.
 
     Private m_DialogResult As System.Boolean?
     ''' <summary>
@@ -543,6 +545,7 @@ Public Class ColorDialog
                         System.Windows.Media.Imaging.BitmapCacheOption.OnLoad)
                 Return Decoder.Frames(0)
             End Using
+
         End Function ' ConvertIcoToBitmapSource
 
     End Class ' IcoToBitmapSourceConverter

@@ -48,7 +48,7 @@ Partial Friend Class ColorDlgWindow
             Const SELECTINDICATED As System.String = "Click to select the indicated "
 
             .CancelButton.ToolTip = "Cancel changes and close the dialog"
-            .OkButton.ToolTip = "Accept status and close the dialog"
+            .OkButton.ToolTip = "Accept changes and close the dialog"
             .RememberButton.ToolTip = "Save the current color for recall"
             .RestoreButton.ToolTip = "Restore the saved color"
 

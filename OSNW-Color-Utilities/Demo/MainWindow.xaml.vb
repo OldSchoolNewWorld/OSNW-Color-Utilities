@@ -15,6 +15,26 @@ Class MainWindow
     Dim Green As System.Int32
     Dim Blue As System.Int32
 
+#Region "Event Utilities"
+
+    Private Sub LoadToolTips()
+        With Me
+
+            Const ENTER255 As System.String = "Enter the component value (0-255)"
+            Const DEMOSELECT As System.String = "Click to select a new color"
+            Const DEMOEXIT As System.String = "Click to exit the demo application"
+
+            .SelectButton.ToolTip = DEMOSELECT
+            .ExitButton.ToolTip = DEMOEXIT
+            .ConvertRgbRedTextBox.ToolTip = ENTER255
+            .ConvertRgbGreenTextBox.ToolTip = ENTER255
+            .ConvertRgbBlueTextBox.ToolTip = ENTER255
+
+        End With
+    End Sub ' LoadToolTips
+
+#End Region ' "Event Utilities"
+
 #Region "Model Events"
 
     '''' <summary>
@@ -38,6 +58,8 @@ Class MainWindow
 
         '        Me.DoWindow_Loaded(sender, e)
 
+        Me.LoadToolTips()
+
         Me.ConvertRgbRedTextBox.Text = DEFAULTRED
         Me.ConvertRgbGreenTextBox.Text = DEFAULTGREEN
         Me.ConvertRgbBlueTextBox.Text = DEFAULTBLUE
@@ -58,7 +80,6 @@ Class MainWindow
         Handles SelectButton.Click
 
         Try
-            '            Me.Do_Window_Initialized(sender, e)
 
             ' Extract the values entered.
             Dim Red As System.Byte =
