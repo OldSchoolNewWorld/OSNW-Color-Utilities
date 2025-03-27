@@ -246,28 +246,6 @@ Partial Friend Class ColorDlgWindow
 
 #Region "Localized Events"
 
-
-#Region "Text Box Events"
-
-    Private Sub ConvertRgbRedTextBox_GotFocus(
-        sender As Object, e As RoutedEventArgs) _
-        Handles ConvertRgbRedTextBox.GotFocus, ConvertRgbGreenTextBox.GotFocus,
-        ConvertRgbBlueTextBox.GotFocus, ConvertHslHueTextBox.GotFocus,
-        ConvertHslSaturationTextBox.GotFocus,
-        ConvertHslLuminanceTextBox.GotFocus, ConvertHsvHueTextBox.GotFocus,
-        ConvertHsvSaturationTextBox.GotFocus, ConvertHsvValueTextBox.GotFocus,
-        BlendRgb1RedTextBox.GotFocus, BlendRgb1GreenTextBox.GotFocus,
-        BlendRgb1BlueTextBox.GotFocus, BlendRgb1RatioTextBox.GotFocus,
-        BlendRgb2RedTextBox.GotFocus, BlendRgb2GreenTextBox.GotFocus,
-        BlendRgb2BlueTextBox.GotFocus, BlendRgb2RatioTextBox.GotFocus
-
-        Dim TheTextBox As System.Windows.Controls.TextBox =
-            DirectCast(sender, System.Windows.Controls.TextBox)
-        TheTextBox.SelectAll()
-    End Sub
-
-#End Region ' "Text Box Events"
-
 #Region "Convert Tab Events"
 
     Private Sub ConvertTabItem_GotFocus(sender As Object, e As RoutedEventArgs) _
