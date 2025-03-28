@@ -483,6 +483,50 @@ Partial Friend Class ColorDlgWindow
 #Region "HSx tabs"
     ' These are routines shared by HSL and HSV.
 
+    '''' <summary>
+    '''' Distributes the impact of the associated change.
+    '''' </summary>
+    '''' <param name="baseH">Specifies the hue component.</param>
+    '''' <param name="baseS">Specifies the saturation component.</param>
+    '''' <param name="baseL">Specifies the value component.</param>
+    Private Sub UpdateBaseValuesFromHSL(ByVal baseH As System.Double,
+        ByVal baseS As System.Double, ByVal baseL As System.Double)
+
+        ' Set base color components and derived values.
+        With Me
+
+            OSNW.Graphics.ColorUtilities.HSLtoRGB(baseH, baseS, baseL,
+                .UnderlyingR, .UnderlyingG, .UnderlyingB)
+
+            .DeriveFromRGB(.UnderlyingR, .UnderlyingG, .UnderlyingB)
+            .ResetRgbLastChange()
+            OSNW.Graphics.ColorUtilities.RGBtoHSV(.UnderlyingR, .UnderlyingG,
+                .UnderlyingB, .HsvWorkH, .HsvWorkS, .HsvWorkV)
+
+        End With
+    End Sub ' UpdateBaseValuesFromHSL
+
+    ''' <summary>
+    ''' Distributes the impact of the associated change.
+    ''' </summary>
+    ''' <param name="baseH">Specifies the hue component.</param>
+    ''' <param name="baseS">Specifies the saturation component.</param>
+    ''' <param name="baseV">Specifies the value component.</param>
+    Private Sub UpdateBaseValuesFromHSV(ByVal baseH As System.Double,
+        ByVal baseS As System.Double, ByVal baseV As System.Double)
+
+        ' Set base color components and derived values.
+        With Me
+
+            OSNW.Graphics.ColorUtilities.HSVtoRGB(baseH, baseS, baseV,
+                .UnderlyingR, .UnderlyingG, .UnderlyingB)
+
+            .DeriveFromRGB(.UnderlyingR, .UnderlyingG, .UnderlyingB)
+            .ResetRgbLastChange()
+
+        End With
+    End Sub ' UpdateBaseValuesFromHSV
+
     ''' <summary>
     ''' Identifies the mouse location within an Image and changes the cursor if
     ''' the mouse in in the desired circle.

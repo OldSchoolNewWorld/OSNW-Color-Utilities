@@ -29,7 +29,8 @@ Imports System.Windows.Controls
 Partial Friend Class ColorDlgWindow
 
 #Region "Global"
-    ' These routines are not tied to a particular color space or type of mix.
+    ' These routines are fairly generic or are not tied to a particular color
+    ' space or type of mix.
 
     '''' <summary>
     '''' Creates a string in a standardized form.
@@ -157,50 +158,6 @@ Partial Friend Class ColorDlgWindow
 
         End With
     End Sub ' UpdateBaseValuesFromRGB
-
-    '''' <summary>
-    '''' Distributes the impact of the associated change.
-    '''' </summary>
-    '''' <param name="baseH">Specifies the hue component.</param>
-    '''' <param name="baseS">Specifies the saturation component.</param>
-    '''' <param name="baseL">Specifies the value component.</param>
-    Private Sub UpdateBaseValuesFromHSL(ByVal baseH As System.Double,
-        ByVal baseS As System.Double, ByVal baseL As System.Double)
-
-        ' Set base color components and derived values.
-        With Me
-
-            OSNW.Graphics.ColorUtilities.HSLtoRGB(baseH, baseS, baseL,
-                .UnderlyingR, .UnderlyingG, .UnderlyingB)
-
-            .DeriveFromRGB(.UnderlyingR, .UnderlyingG, .UnderlyingB)
-            .ResetRgbLastChange()
-            OSNW.Graphics.ColorUtilities.RGBtoHSV(.UnderlyingR, .UnderlyingG,
-                .UnderlyingB, .HsvWorkH, .HsvWorkS, .HsvWorkV)
-
-        End With
-    End Sub ' UpdateBaseValuesFromHSL
-
-    ''' <summary>
-    ''' Distributes the impact of the associated change.
-    ''' </summary>
-    ''' <param name="baseH">Specifies the hue component.</param>
-    ''' <param name="baseS">Specifies the saturation component.</param>
-    ''' <param name="baseV">Specifies the value component.</param>
-    Private Sub UpdateBaseValuesFromHSV(ByVal baseH As System.Double,
-        ByVal baseS As System.Double, ByVal baseV As System.Double)
-
-        ' Set base color components and derived values.
-        With Me
-
-            OSNW.Graphics.ColorUtilities.HSVtoRGB(baseH, baseS, baseV,
-                .UnderlyingR, .UnderlyingG, .UnderlyingB)
-
-            .DeriveFromRGB(.UnderlyingR, .UnderlyingG, .UnderlyingB)
-            .ResetRgbLastChange()
-
-        End With
-    End Sub ' UpdateBaseValuesFromHSV
 
     '''' <summary>
     '''' Distributes the impact of the associated change.
