@@ -614,7 +614,7 @@ Public Class ColorDialog
 
     ''' <summary>
     ''' Initializes a new instance of the
-    ''' <see cref="OSNW.Graphics.ColorDialog"/>
+    ''' <see cref="OSNW.Dialog.ColorDialog"/>
     ''' class.
     ''' </summary>
     Public Sub New()
@@ -753,7 +753,7 @@ Public Class ColorDialog
     Public Function ShowDialog() As System.Boolean?
         Dim DlgResult As System.Boolean?
 #Disable Warning IDE0017 ' Simplify object initialization
-        Dim HostedWindow As New OSNW.Graphics.ColorDlgWindow
+        Dim HostedWindow As New OSNW.Dialog.ColorDlgWindow
 #Enable Warning IDE0017 ' Simplify object initialization
 
         ' Set the model properties that get sent to the window.

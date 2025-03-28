@@ -3,8 +3,6 @@ Option Strict On
 Option Compare Binary
 Option Infer Off
 
-Imports OSNW.Graphics
-
 Class MainWindow
 
     Const DEFAULTRED As System.String = "64"
@@ -90,7 +88,7 @@ Class MainWindow
                 System.Byte.Parse(Me.ConvertRgbBlueTextBox.Text)
 
             ' Set up and show dialog.
-            Dim Dlg As New OSNW.Graphics.ColorDialog With {
+            Dim Dlg As New OSNW.Dialog.ColorDialog With {
                 .Owner = Me, .Red = Red, .Green = Green, .Blue = Blue}
             Dlg.ShowDialog()
 

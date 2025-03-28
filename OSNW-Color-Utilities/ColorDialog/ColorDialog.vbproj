@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>OSNW.Dialog</RootNamespace>
+    <TargetFramework>net8.0-windows8.0</TargetFramework>
+    <AssemblyName>OSNW.Dialog.ColorDialog</AssemblyName>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="OSNW.Graphics.ColorUtilities">
+      <HintPath>..\Utilities\bin\Debug\net8.0-windows8.0\OSNW.Graphics.ColorUtilities.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

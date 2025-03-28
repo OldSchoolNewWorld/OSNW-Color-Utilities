@@ -2,7 +2,8 @@
 Option Strict On
 Option Compare Binary
 Option Infer Off
-Imports OSNW.Graphics.ColorDlgWindow
+
+Imports OSNW.Dialog.ColorDlgWindow
 Imports System.Windows.Input
 
 Partial Friend Class ColorDlgWindow
