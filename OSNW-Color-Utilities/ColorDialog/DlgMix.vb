@@ -78,8 +78,8 @@ Partial Friend Class ColorDlgWindow
             .ShadeTweakGreenLabel.Content = .DoubleValueStr(GREENWORD, .ShadeStartG)
             .ShadeTweakBlueLabel.Content = .DoubleValueStr(BLUEWORD, .ShadeStartB)
             .ShadeTweakHueLabel.Content = .DoubleValueStr(HUEWORD, .ShadeStartH)
-            .ShadeTweakFactorLabel.Content = .DoubleValueStr("Factor",
-                                                             .ShadeWorkFactor)
+            .ShadeTweakFactorLabel.Content = .DoubleValueStr(
+                "Factor", .ShadeWorkFactor / 1000.0)
 
             ' Limit visibility until a selection has been made.
             If .ShadeFactorClicked Then
@@ -239,7 +239,7 @@ Partial Friend Class ColorDlgWindow
             .TintTweakBlueLabel.Content = .DoubleValueStr(BLUEWORD, .TintStartB)
             .TintTweakHueLabel.Content = .DoubleValueStr(HUEWORD, .TintStartH)
             .TintTweakFactorLabel.Content = .DoubleValueStr(
-                "Factor", .TintWorkFactor)
+                "Factor", .TintWorkFactor / 1000.0)
 
             ' Limit visibility until a selection has been made.
             If .TintFactorClicked Then
